@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Vector3 _move;
     [SerializeField] private float _velocity;
 
+    private LevelController _levelController;
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -16,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
         _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
         _inputs.Player.Move.canceled += context => _move = Vector2.zero;
+
+        _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
     }
 
     private void OnEnable() => _inputs.Enable();
@@ -33,4 +37,19 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(_move.x * _velocity * Time.fixedDeltaTime, 0.0f, _move.y * _velocity * Time.fixedDeltaTime);
         _controller.Move(movement);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Instruction":
+                Debug.Log("Instruction");
+                break;
+            case "BattlePoint":
+                _levelController.BattleScene();
+                Debug.Log("BattlePoint");
+                break;
+        }
+    }
+
 }

@@ -12,6 +12,11 @@ public class LevelController : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
+    public void BattleScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+    }
+
     public void MainMenu()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);

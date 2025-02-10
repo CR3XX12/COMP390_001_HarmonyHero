@@ -12,8 +12,8 @@ public class MainMenuController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        StartCoroutine(DelayedMethod(1f));
-
+        cover.enabled = true;
+        StartCoroutine(DelayedMethod(delay));
     }
 
     // Update is called once per frame

@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
 
-    private GameObject battleManager;
+    [SerializeField] private GameObject battleManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
 
     public void ResetAction()
     {
+        battleManager.SetActive(false);
         dialogue.SetActive(true);
         battleKeys.SetActive(false);
         attackTxt.SetActive(false);
@@ -52,6 +53,7 @@ public class UIManager : MonoBehaviour
         attackTxt.SetActive(true);
         battleManager.SetActive(true);
         battleManager.GetComponent<BattleManager>().actionChosen = "Attack";
+        battleManager.GetComponent<SpaceBarController>().BarReset();
     }
 
     public void PressedHeal()
@@ -61,6 +63,7 @@ public class UIManager : MonoBehaviour
         healTxt.SetActive(true);
         battleManager.gameObject.SetActive(true);
         battleManager.gameObject.GetComponent<BattleManager>().actionChosen = "Heal";
+        battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
     }
 
 }

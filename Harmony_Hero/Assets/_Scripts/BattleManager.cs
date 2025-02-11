@@ -15,7 +15,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private Color pressed;
     [SerializeField] private GameObject[] arrows;
 
-    [SerializeField] private List<Vector2> playerMove;
+    [SerializeField] public List<Vector2> playerMove;
 
     private Vector2[] moveOptions;
     [SerializeField] private Vector2[] moveSelected;
@@ -71,7 +71,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void ResetKeysUI()
+    public void ResetKeysUI()
     {
         foreach (GameObject arrow in arrows)
         {
@@ -107,7 +107,12 @@ public class BattleManager : MonoBehaviour
         AssignArrow();
         gameObject.SetActive(false);
     }
-
+    public void ResetKeys()
+    {
+        playerMove.Clear();
+        pressedArrows.Clear();
+        pressedArrows = new List<bool>(new bool[6]);
+    }
     void Update()
     {
         if (_move != Vector2.zero)
@@ -121,9 +126,7 @@ public class BattleManager : MonoBehaviour
                 }
                 else if (playerMove[i] != moveSelected[i] && !pressedArrows[i])
                 {
-                    playerMove.Clear();
-                    pressedArrows.Clear();
-                    pressedArrows = new List<bool>(new bool[6]);
+                    ResetKeys();
                     ResetKeysUI();
                 }
             }
@@ -132,10 +135,7 @@ public class BattleManager : MonoBehaviour
         if (playerMove.Count >= 6)
         {
             actionButton.interactable = true;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                actionButton.onClick.Invoke();
-            }
+
         }
         else
         {

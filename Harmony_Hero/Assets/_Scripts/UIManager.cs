@@ -11,7 +11,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
 
-    private GameObject battleManager;
+    [SerializeField] private GameObject battleManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
 
     public void ResetAction()
     {
+        battleManager.SetActive(false);
         dialogue.SetActive(true);
         battleKeys.SetActive(false);
         attackTxt.SetActive(false);

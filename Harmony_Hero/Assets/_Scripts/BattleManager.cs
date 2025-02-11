@@ -132,10 +132,10 @@ public class BattleManager : MonoBehaviour
         if (playerMove.Count >= 6)
         {
             actionButton.interactable = true;
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                actionButton.onClick.Invoke();
-            }
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    actionButton.onClick.Invoke();
+            //}
         }
         else
         {

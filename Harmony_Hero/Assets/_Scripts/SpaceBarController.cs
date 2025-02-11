@@ -7,15 +7,16 @@ public class SpaceBarController : MonoBehaviour
 {
     [SerializeField] private GameObject _actionBar;
     [SerializeField] private float _actionBarValue;
-    [SerializeField] private float speed = 0.5f;
+    [SerializeField] public float speed;
     [SerializeField] private Button actionButton;
-
+    [SerializeField] private GameObject battleManager;
     // Perfect 0.8
     // Pass 0.75 to 0.85
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        battleManager = GameObject.Find("BattleManager");
         _actionBar = GameObject.Find("ActionBar");
         _actionBar.GetComponent<Slider>().value = 1f;
     }
@@ -31,11 +32,21 @@ public class SpaceBarController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CheckHit();
+            if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
+            {
+                CheckHit();
+            }
+            else
+            {
+                Debug.Log("Fail");
+                battleManager.GetComponent<BattleManager>().ResetKeys();
+                battleManager.GetComponent<BattleManager>().ResetKeysUI();
+                BarReset();
+            }
         }
     }
 
-    private void BarReset()
+    public void BarReset()
     {
         _actionBar.GetComponent<Slider>().value = 0.0f;
         speed = 0.0f;
@@ -74,9 +85,11 @@ public class SpaceBarController : MonoBehaviour
         else
         {
             Debug.Log("Fail");
+            battleManager.GetComponent<BattleManager>().ResetKeys();
+            battleManager.GetComponent<BattleManager>().ResetKeysUI();
             BarReset();
         }
 
-        
+
     }
 }

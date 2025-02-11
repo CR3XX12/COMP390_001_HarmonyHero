@@ -22,11 +22,14 @@ public class BattleManager : MonoBehaviour
     private List<bool> pressedArrows = new List<bool>(new bool[6]);
 
     [SerializeField] private Button actionButton;
+    [SerializeField] public string actionChosen;
+
+
 
     private void Awake()
     {
         _player = GameObject.Find("Player");
-        _player = GameObject.Find("Enemy");
+        _enemy = GameObject.Find("EnemyAI");
         _inputs = new InputSystem_Actions();
 
     }
@@ -54,6 +57,18 @@ public class BattleManager : MonoBehaviour
 
         InitiateMoves();
         AssignArrow();
+    }
+
+    public void ImplementAction()
+    {
+        if (actionChosen == "Attack")
+        {
+            _enemy.GetComponent<EnemyController>()._enemyHealth -= _player.GetComponent<PlayerController>()._playerDamage;
+        }
+        else if (actionChosen == "Heal")
+        {
+            _player.GetComponent<PlayerController>()._playerHealth += 0.1f;
+        }
     }
 
     private void ResetKeysUI()

@@ -7,15 +7,34 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject battleKeys;
     [SerializeField] private GameObject attackTxt;
     [SerializeField] private GameObject healTxt;
+
+    [SerializeField] private GameObject playerHealth;
+    [SerializeField] private GameObject enemyHealth;
+
+    private GameObject battleManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        battleManager = GameObject.Find("BattleManager");
+        playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
+        enemyHealth = GameObject.Find("EnemyHUD").transform.Find("Health").gameObject;
+
         dialogue = GameObject.Find("Dialogue");
         battleKeys = GameObject.Find("BattleKeys");
         attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
         healTxt = battleKeys.transform.Find("HealTxt").gameObject;
 
+        playerHealth.GetComponent<Slider>().value = 1f;
+        enemyHealth.GetComponent<Slider>().value = 1f;
+
         ResetAction();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
+        enemyHealth.GetComponent<Slider>().value = GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyHealth;
     }
 
     public void ResetAction()
@@ -31,7 +50,8 @@ public class UIManager : MonoBehaviour
         dialogue.SetActive(false);
         battleKeys.SetActive(true);
         attackTxt.SetActive(true);
-        battleKeys.transform.Find("BattleManager").gameObject.SetActive(true);
+        battleManager.SetActive(true);
+        battleManager.GetComponent<BattleManager>().actionChosen = "Attack";
     }
 
     public void PressedHeal()
@@ -39,7 +59,8 @@ public class UIManager : MonoBehaviour
         dialogue.SetActive(false);
         battleKeys.SetActive(true);
         healTxt.SetActive(true);
-        battleKeys.transform.Find("BattleManager").gameObject.SetActive(true);
+        battleManager.gameObject.SetActive(true);
+        battleManager.gameObject.GetComponent<BattleManager>().actionChosen = "Heal";
     }
 
 }

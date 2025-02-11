@@ -6,10 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     private CharacterController _controller;
     private InputSystem_Actions _inputs;
-    [SerializeField] private Vector3 _move;
+    [SerializeField] private Vector2 _move;
     [SerializeField] private float _velocity;
 
     private LevelController _levelController;
+
+    [SerializeField] public float _playerHealth;
+    [SerializeField] public float _playerDamage;
 
     private void Awake()
     {
@@ -19,7 +22,6 @@ public class PlayerController : MonoBehaviour
         _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
         _inputs.Player.Move.canceled += context => _move = Vector2.zero;
 
-        _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
     }
 
     private void OnEnable() => _inputs.Enable();
@@ -29,6 +31,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
 
+        _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
     }
 
     // Update is called once per frame
@@ -36,6 +39,11 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 movement = new Vector3(_move.x * _velocity * Time.fixedDeltaTime, 0.0f, _move.y * _velocity * Time.fixedDeltaTime);
         _controller.Move(movement);
+
+        if (_playerHealth <= 0)
+        {
+            _levelController.LoseScene();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

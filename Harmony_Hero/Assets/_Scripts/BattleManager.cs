@@ -19,7 +19,9 @@ public class BattleManager : MonoBehaviour
 
     private Vector2[] moveOptions;
     [SerializeField] private Vector2[] moveSelected;
-    private List<bool> pressedArrows = new List<bool>();
+    private List<bool> pressedArrows = new List<bool>(new bool[6]);
+
+    [SerializeField] private Button actionButton;
 
     private void Awake()
     {
@@ -27,9 +29,6 @@ public class BattleManager : MonoBehaviour
         _player = GameObject.Find("Enemy");
         _inputs = new InputSystem_Actions();
 
-        _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
-        _inputs.Player.Move.performed += context => playerMove.Add(_move);
-        _inputs.Player.Move.canceled += context => _move = Vector2.zero;
     }
     private void OnEnable() => _inputs.Enable();
     private void OnDisable() => _inputs.Disable();
@@ -37,32 +36,36 @@ public class BattleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        pressed = new Color(217 / 255f, 174 / 255f, 81 / 255f, 1.0f);
+
+        _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
+        _inputs.Player.Move.performed += context => playerMove.Add(_move);
+        _inputs.Player.Move.canceled += context => _move = Vector2.zero;
+
         unpressed = new Color(96 / 255f, 66 / 255f, 0.0f, 1.0f);
-        foreach (GameObject arrow in arrows)
-        {
-            arrow.GetComponent<Image>().color = unpressed;
-        }
+        pressed = new Color(217 / 255f, 174 / 255f, 81 / 255f, 1.0f);
 
-        InitiateMoves();
-        AssignArrow();
+        ResetKeysUI();
 
-        pressedArrows.Add(false);
-        pressedArrows.Add(false);
-        pressedArrows.Add(false);
-        pressedArrows.Add(false);
-        pressedArrows.Add(false);
-        pressedArrows.Add(false);
-    }
-
-    private void InitiateMoves()
-    {
         moveOptions = new Vector2[4];
         moveOptions[0] = new Vector2(0, 1); //up
         moveOptions[1] = new Vector2(0, -1); //down
         moveOptions[2] = new Vector2(1, 0); //right
         moveOptions[3] = new Vector2(-1, 0); //left
 
+        InitiateMoves();
+        AssignArrow();
+    }
+
+    private void ResetKeysUI()
+    {
+        foreach (GameObject arrow in arrows)
+        {
+            arrow.GetComponent<Image>().color = unpressed;
+        }
+    }
+
+    private void InitiateMoves()
+    {
         moveSelected = new Vector2[6];
         for (int i = 0; i < 6; i++)
         {
@@ -79,7 +82,18 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    public void ResetBattle()
+    {
+        playerMove.Clear();
+        pressedArrows.Clear();
+        pressedArrows = new List<bool>(new bool[6]);
+        ResetKeysUI();
+        InitiateMoves();
+        AssignArrow();
+        gameObject.SetActive(false);
+    }
+
+    void Update()
     {
         if (_move != Vector2.zero)
         {
@@ -90,9 +104,28 @@ public class BattleManager : MonoBehaviour
                     arrows[i].GetComponent<Image>().color = pressed;
                     pressedArrows[i] = true;
                 }
+                else if (playerMove[i] != moveSelected[i] && !pressedArrows[i])
+                {
+                    playerMove.Clear();
+                    pressedArrows.Clear();
+                    pressedArrows = new List<bool>(new bool[6]);
+                    ResetKeysUI();
+                }
             }
         }
 
+        if (playerMove.Count >= 6)
+        {
+            actionButton.interactable = true;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                actionButton.onClick.Invoke();
+            }
+        }
+        else
+        {
+            actionButton.interactable = false;
+        }
     }
 
 }

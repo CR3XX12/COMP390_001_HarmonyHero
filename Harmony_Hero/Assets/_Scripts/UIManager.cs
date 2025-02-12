@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject dialogue;
+    [SerializeField] private GameObject enemyDialogue;
     [SerializeField] private GameObject battleKeys;
     [SerializeField] private GameObject attackTxt;
     [SerializeField] private GameObject healTxt;
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
         enemyHealth = GameObject.Find("EnemyHUD").transform.Find("Health").gameObject;
 
         dialogue = GameObject.Find("Dialogue");
+        enemyDialogue = GameObject.Find("EnemyDialogue");
         battleKeys = GameObject.Find("BattleKeys");
         attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
         healTxt = battleKeys.transform.Find("HealTxt").gameObject;
@@ -27,6 +29,7 @@ public class UIManager : MonoBehaviour
         playerHealth.GetComponent<Slider>().value = 1f;
         enemyHealth.GetComponent<Slider>().value = 1f;
 
+        ResetDialogue();
         ResetAction();
     }
 
@@ -39,11 +42,18 @@ public class UIManager : MonoBehaviour
 
     public void ResetAction()
     {
+        enemyDialogue.SetActive(true);
         battleManager.SetActive(false);
-        dialogue.SetActive(true);
         battleKeys.SetActive(false);
         attackTxt.SetActive(false);
         healTxt.SetActive(false);
+        Invoke("ResetDialogue", 2f);
+    }
+
+    public void ResetDialogue()
+    {
+        enemyDialogue.SetActive(false);
+        dialogue.SetActive(true);
     }
 
     public void PressedAttack()

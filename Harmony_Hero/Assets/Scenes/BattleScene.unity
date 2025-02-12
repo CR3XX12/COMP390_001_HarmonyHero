@@ -2677,6 +2677,10 @@ PrefabInstance:
       propertyPath: m_text
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 1018639904369743081, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
+      propertyPath: m_Value
+      value: 0.09
+      objectReference: {fileID: 0}
     - target: {fileID: 2261673585221129386, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
       propertyPath: m_Name
       value: EnemyHUD

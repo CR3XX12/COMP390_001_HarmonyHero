@@ -42,6 +42,7 @@ public class BattleManager : MonoBehaviour
 
         _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
         _inputs.Player.Move.performed += context => playerMove.Add(_move);
+        // animation according to key pressed
         _inputs.Player.Move.canceled += context => _move = Vector2.zero;
 
         unpressed = new Color(96 / 255f, 66 / 255f, 0.0f, 1.0f);

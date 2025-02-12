@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
         _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
     }
 
@@ -41,7 +40,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(_move.x * _velocity * Time.fixedDeltaTime, 0.0f, _move.y * _velocity * Time.fixedDeltaTime);
         _controller.Move(movement);
 
-        if (_playerHealth <= 0)
+        if (_playerHealth <= 0.05f)
         {
             _levelController.LoseScene();
         }

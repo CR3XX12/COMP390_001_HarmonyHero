@@ -84,7 +84,7 @@ public class SpaceBarController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Fail");
+            Debug.Log("Miss");
             battleManager.GetComponent<BattleManager>().ResetKeys();
             battleManager.GetComponent<BattleManager>().ResetKeysUI();
             BarReset();

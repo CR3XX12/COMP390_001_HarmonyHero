@@ -63,10 +63,13 @@ public class BattleManager : MonoBehaviour
     {
         if (actionChosen == "Attack")
         {
+            // player attack animation
             _enemy.GetComponent<EnemyController>()._enemyHealth -= _player.GetComponent<PlayerController>()._playerDamage;
+            _enemy.GetComponent<EnemyController>().isAttacked = true;
         }
         else if (actionChosen == "Heal")
         {
+            // player heal animation
             _player.GetComponent<PlayerController>()._playerHealth += 0.1f;
         }
     }
@@ -141,6 +144,8 @@ public class BattleManager : MonoBehaviour
         {
             actionButton.interactable = false;
         }
+
+
     }
 
 }

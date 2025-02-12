@@ -16,7 +16,7 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_enemyHealth <= 0)
+        if (_enemyHealth <= 0.05f)
         {
             LevelController levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
             levelController.WinScene();

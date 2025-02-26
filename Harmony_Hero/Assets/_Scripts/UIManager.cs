@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -13,10 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
 
-    // XP UI
-    [SerializeField] private Text xpText;
-    [SerializeField] private Text levelText;
-    [SerializeField] private Text xpGainText; // XP+ text (e.g., "+50")
+    // XP UI   
+    [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private Slider xpBar;   // XP progress bar
 
 
@@ -36,16 +35,13 @@ public class UIManager : MonoBehaviour
         attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
         healTxt = battleKeys.transform.Find("HealTxt").gameObject;
 
-        playerHealth.GetComponent<Slider>().value = 1f;
-        enemyHealth.GetComponent<Slider>().value = 1f;
+        if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
+        if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
 
-        // Correctly assign Level and XP UI elements
-        levelText = GameObject.Find("PlayerHUD").transform.Find("Level").GetComponent<Text>();
-        xpText = GameObject.Find("PlayerHUD").transform.Find("XP+").GetComponent<Text>();
-        xpBar = GameObject.Find("PlayerHUD").transform.Find("XPbar").GetComponent<Slider>();
-
-        xpGainText.gameObject.SetActive(false); // Hide XP+ by default
-
+        // Assign UI Elements properly
+        levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
+                
         ResetDialogue();
         ResetAction();
     }
@@ -53,8 +49,15 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
-        enemyHealth.GetComponent<Slider>().value = GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyHealth;
+        if (playerHealth != null && GameObject.Find("Player") != null)
+        {
+            playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
+        }
+
+        if (enemyHealth != null && GameObject.Find("EnemyAI") != null)
+        {
+            enemyHealth.GetComponent<Slider>().value = GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyHealth;
+        }
     }
 
     public void ResetAction()
@@ -93,27 +96,15 @@ public class UIManager : MonoBehaviour
         battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
     }
 
-    // Update XP UI (XP text and level)
-    public void UpdateXPUI(int xp, int level)
-    {
-        xpText.text = "XP: " + xp;
-        levelText.text = "Level: " + level;
-    }
+    // Update XP UI (XP bar and level)
+    public void UpdateXPUI(int xp, int level, int xpToNextLevel)
+    {        
+        if (levelText != null) levelText.text = "Level: " + level;
 
-    // Show XP+ text briefly after battle and update XP bar
-    public void ShowXPReward(int xpGained, int currentXP, int xpToNextLevel)
-    {
-        xpGainText.text = "+" + xpGained;
-        xpGainText.gameObject.SetActive(true); // Show XP+
-        xpBar.value = (float)currentXP / xpToNextLevel; // Update XP bar
-
-        StartCoroutine(HideXPText()); // Hide XP+ after a few seconds
-    }
-
-    private IEnumerator HideXPText()
-    {
-        yield return new WaitForSeconds(2f); // Wait 2 seconds
-        xpGainText.gameObject.SetActive(false); // Hide XP+
+        if (xpBar != null)
+        {
+            xpBar.value = (float)xp / xpToNextLevel; // Correctly update XP progress
+        }
     }
 }
 

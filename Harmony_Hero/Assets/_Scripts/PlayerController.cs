@@ -13,11 +13,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float _playerHealth;
     [SerializeField] public float _playerDamage;
 
-    //XP varaibles
+    // XP Variables
     [SerializeField] public int _playerXP = 0;
     [SerializeField] public int _playerLevel = 1;
     [SerializeField] public int _xpToNextLevel = 100;
-
 
     private void Awake()
     {
@@ -26,13 +25,11 @@ public class PlayerController : MonoBehaviour
 
         _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
         _inputs.Player.Move.canceled += context => _move = Vector2.zero;
-
     }
 
     private void OnEnable() => _inputs.Enable();
     private void OnDisable() => _inputs.Disable();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
@@ -43,12 +40,11 @@ public class PlayerController : MonoBehaviour
             DataKeeper.Instance.LoadPlayerData(this);
         }
 
-        // Update UI after loading saved data
+        // Update XP & Level UI after loading saved data
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
         {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel);
-            uiManager.ShowXPReward(0, _playerXP, _xpToNextLevel); // Ensure XP bar starts with correct value
+            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
         }
     }
 
@@ -73,22 +69,21 @@ public class PlayerController : MonoBehaviour
     {
         switch (other.tag)
         {
-            case "Instruction":               
+            case "Instruction":
                 break;
 
-            case "BattlePoint":                
-
-                // Save XP, Level, and Health before entering battle
+            case "BattlePoint":
+                // Save player progress before entering battle
                 if (DataKeeper.Instance != null)
                 {
                     DataKeeper.Instance.SavePlayerData(this);
                 }
 
-                // Find and call LevelController to load the Battle Scene
+                // Find and transition to battle scene
                 LevelController levelController = FindFirstObjectByType<LevelController>();
                 if (levelController != null)
                 {
-                    levelController.BattleScene(); // ✅ Transition to battle scene
+                    levelController.BattleScene();
                 }
                 else
                 {
@@ -98,17 +93,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     public void GainXP(int xpAmount)
     {
         _playerXP += xpAmount;
-        Debug.Log("Gained " + xpAmount + " XP!");
 
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
         {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel);
-            uiManager.ShowXPReward(xpAmount, _playerXP, _xpToNextLevel); // Show XP+ and update XP bar
+            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel); // Update UI when XP is gained
         }
 
         if (_playerXP >= _xpToNextLevel)
@@ -126,22 +118,18 @@ public class PlayerController : MonoBehaviour
         _playerHealth += 0.2f;  // Increase player health slightly
         _playerDamage += 0.1f;  // Increase damage slightly
 
-        Debug.Log("Leveled up to " + _playerLevel + "! Health and Damage Increased.");
-
-        //  Save progress immediately after leveling up
+        // Save progress immediately after leveling up
         if (DataKeeper.Instance != null)
         {
             DataKeeper.Instance.SavePlayerData(this);
         }
 
+        // Update UI after leveling up
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
         {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel);
+            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
         }
     }
-
-
-
-
 }
+

@@ -69,6 +69,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Instruction":               
+                break;
+
+            case "BattlePoint":                
+
+                // Save XP, Level, and Health before entering battle
+                if (DataKeeper.Instance != null)
+                {
+                    DataKeeper.Instance.SavePlayerData(this);
+                }
+
+                // Find and call LevelController to load the Battle Scene
+                LevelController levelController = FindFirstObjectByType<LevelController>();
+                if (levelController != null)
+                {
+                    levelController.BattleScene(); // ✅ Transition to battle scene
+                }
+                else
+                {
+                    Debug.LogError("LevelController not found! Make sure it exists in the scene.");
+                }
+                break;
+        }
+    }
+
+
     public void GainXP(int xpAmount)
     {
         _playerXP += xpAmount;

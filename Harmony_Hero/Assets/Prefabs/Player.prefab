@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 6138737604843713049}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -124,8 +124,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d4c42d7926a58742beeef20636e65bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _move: {x: 0, y: 0, z: 0}
-  _velocity: 2
+  _move: {x: 0, y: 0}
+  _velocity: 0
+  _playerHealth: 1
+  _playerDamage: 0.5
+  _playerXP: 0
+  _playerLevel: 2
+  _xpToNextLevel: 100
 --- !u!143 &6138737604843713049
 CharacterController:
   m_ObjectHideFlags: 0

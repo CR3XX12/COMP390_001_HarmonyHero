@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Windows;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
+        _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
 
         // Load saved player data if available
         if (DataKeeper.Instance != null)
@@ -40,13 +41,24 @@ public class PlayerController : MonoBehaviour
             DataKeeper.Instance.LoadPlayerData(this);
         }
 
-        // Update XP & Level UI after loading saved data
+        // Delay UI Update to Prevent NULL Errors
+        StartCoroutine(DelayedUIUpdate());
+    }
+
+    // Coroutine to Delay UI Update for 0.1 seconds
+    private IEnumerator DelayedUIUpdate()
+    {
+        yield return new WaitForSeconds(0.1f);  // Small delay to allow UIManager to initialize
+
         UIManager uiManager = FindFirstObjectByType<UIManager>();
+
         if (uiManager != null)
         {
             uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
         }
     }
+
+
 
     void Update()
     {
@@ -61,7 +73,15 @@ public class PlayerController : MonoBehaviour
             {
                 DataKeeper.Instance.SavePlayerData(this);
             }
-            _levelController.LoseScene();
+
+            if (_levelController != null)
+            {
+                _levelController.LoseScene();
+            }
+            else
+            {
+                Debug.LogError("LevelController is NULL! Make sure it exists in the scene.");
+            }
         }
     }
 
@@ -95,12 +115,16 @@ public class PlayerController : MonoBehaviour
 
     public void GainXP(int xpAmount)
     {
-        _playerXP += xpAmount;
+        _playerXP += xpAmount;        
 
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
+        {            
+            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
+        }
+        else
         {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel); // Update UI when XP is gained
+            Debug.LogError("[PlayerController] UIManager not found!");
         }
 
         if (_playerXP >= _xpToNextLevel)
@@ -113,10 +137,12 @@ public class PlayerController : MonoBehaviour
     {
         _playerXP -= _xpToNextLevel;
         _playerLevel++;
-        _xpToNextLevel += _playerLevel * 50;  // Increase XP requirement for next level
+        _xpToNextLevel += _playerLevel * 50;  // Increase XP needed for next level
 
         _playerHealth += 0.2f;  // Increase player health slightly
         _playerDamage += 0.1f;  // Increase damage slightly
+
+        
 
         // Save progress immediately after leveling up
         if (DataKeeper.Instance != null)
@@ -127,9 +153,12 @@ public class PlayerController : MonoBehaviour
         // Update UI after leveling up
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
-        {
+        {            
             uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
+        }
+        else
+        {
+            Debug.LogError("[PlayerController] UIManager not found after leveling up!");
         }
     }
 }
-

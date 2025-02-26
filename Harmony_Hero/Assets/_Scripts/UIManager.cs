@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
 
    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         battleManager = GameObject.Find("BattleManager");
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
                 
         ResetDialogue();
-        ResetAction();
+        ResetAction();      
     }
 
     // Update is called once per frame
@@ -96,16 +96,31 @@ public class UIManager : MonoBehaviour
         battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
     }
 
-    // Update XP UI (XP bar and level)
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)
     {        
-        if (levelText != null) levelText.text = "Level: " + level;
+
+        if (levelText != null)
+        {
+            levelText.text = "lv." + level.ToString();           
+        }
+        else
+        {
+            Debug.LogError("[UIManager] Level Text is NULL!");
+        }
 
         if (xpBar != null)
         {
-            xpBar.value = (float)xp / xpToNextLevel; // Correctly update XP progress
+            xpBar.maxValue = xpToNextLevel;  // Set XP bar's max value
+            xpBar.value = xp;  // Set XP bar's current value            
+        }
+        else
+        {
+            Debug.LogError("[UIManager] XP Bar is NULL!");
         }
     }
+
+
+
 }
 
 

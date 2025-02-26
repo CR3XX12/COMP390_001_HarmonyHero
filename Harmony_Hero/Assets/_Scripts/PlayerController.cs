@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.Windows;
 using System.Collections;
+using TMPro;
+using UnityEngine.UI;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,6 +21,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int _playerXP = 0;
     [SerializeField] public int _playerLevel = 1;
     [SerializeField] public int _xpToNextLevel = 100;
+
+    // UI Elements (For Level 1 UI)
+    private TextMeshProUGUI levelText;
+    private Slider xpBar;
+    private Slider healthBar;
+
 
     private void Awake()
     {
@@ -39,6 +48,29 @@ public class PlayerController : MonoBehaviour
         if (DataKeeper.Instance != null)
         {
             DataKeeper.Instance.LoadPlayerData(this);
+        }
+
+        // Find Player UI in Level 1 if it exists
+        GameObject levelTextObj = GameObject.Find("Level");
+        if (levelTextObj != null)
+        {
+            levelText = levelTextObj.GetComponent<TextMeshProUGUI>();
+            levelText.text = "lv." + _playerLevel;
+        }
+
+        GameObject xpBarObj = GameObject.Find("XPbar");
+        if (xpBarObj != null)
+        {
+            xpBar = xpBarObj.GetComponent<Slider>();
+            xpBar.maxValue = _xpToNextLevel;
+            xpBar.value = _playerXP;
+        }
+
+        GameObject healthBarObj = GameObject.Find("Health");
+        if (healthBarObj != null)
+        {
+            healthBar = healthBarObj.GetComponent<Slider>();
+            healthBar.value = _playerHealth;
         }
 
         // Delay UI Update to Prevent NULL Errors
@@ -115,16 +147,23 @@ public class PlayerController : MonoBehaviour
 
     public void GainXP(int xpAmount)
     {
-        _playerXP += xpAmount;        
+        _playerXP += xpAmount;
 
+        // Update UI in Level 1 (If UI exists)
+        if (xpBar != null)
+        {
+            xpBar.value = _playerXP;
+        }
+        if (levelText != null)
+        {
+            levelText.text = "lv." + _playerLevel;
+        }
+
+        // Update UI in BattleScene if UIManager exists
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
-        {            
-            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
-        }
-        else
         {
-            Debug.LogError("[PlayerController] UIManager not found!");
+            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
         }
 
         if (_playerXP >= _xpToNextLevel)
@@ -142,18 +181,27 @@ public class PlayerController : MonoBehaviour
         _playerHealth += 0.2f;  // Increase player health slightly
         _playerDamage += 0.1f;  // Increase damage slightly
 
-        
-
         // Save progress immediately after leveling up
         if (DataKeeper.Instance != null)
         {
             DataKeeper.Instance.SavePlayerData(this);
         }
 
-        // Update UI after leveling up
+        // Update Level 1 UI
+        if (levelText != null)
+        {
+            levelText.text = "lv." + _playerLevel;
+        }
+        if (xpBar != null)
+        {
+            xpBar.maxValue = _xpToNextLevel;
+            xpBar.value = _playerXP;
+        }
+
+        // Update UI in BattleScene if UIManager exists
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)
-        {            
+        {
             uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
         }
         else

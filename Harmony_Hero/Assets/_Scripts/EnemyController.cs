@@ -18,6 +18,17 @@ public class EnemyController : MonoBehaviour
     {
         if (_enemyHealth <= 0.05f)
         {
+            // Get PlayerController and reward XP
+            PlayerController player = _player.GetComponent<PlayerController>();
+            player.GainXP(50);  // Reward XP for winning the battle
+
+            // Save XP and Level progress before scene transition
+            if (DataKeeper.Instance != null)
+            {
+                DataKeeper.Instance.SavePlayerData(player);
+            }
+
+            // Load the victory scene
             LevelController levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
             levelController.WinScene();
         }
@@ -26,9 +37,7 @@ public class EnemyController : MonoBehaviour
         {
             EnemyAttack();
         }
-
     }
-
     public void EnemyAttack()
     {
         // enemy attack animation

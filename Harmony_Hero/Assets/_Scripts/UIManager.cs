@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,7 +13,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
 
+    // XP UI
+    [SerializeField] private Text xpText;
+    [SerializeField] private Text levelText;
+    [SerializeField] private Text xpGainText; // XP+ text (e.g., "+50")
+    [SerializeField] private Slider xpBar;   // XP progress bar
+
+
     [SerializeField] private GameObject battleManager;
+
+   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -28,6 +38,13 @@ public class UIManager : MonoBehaviour
 
         playerHealth.GetComponent<Slider>().value = 1f;
         enemyHealth.GetComponent<Slider>().value = 1f;
+
+        // Correctly assign Level and XP UI elements
+        levelText = GameObject.Find("PlayerHUD").transform.Find("Level").GetComponent<Text>();
+        xpText = GameObject.Find("PlayerHUD").transform.Find("XP+").GetComponent<Text>();
+        xpBar = GameObject.Find("PlayerHUD").transform.Find("XPbar").GetComponent<Slider>();
+
+        xpGainText.gameObject.SetActive(false); // Hide XP+ by default
 
         ResetDialogue();
         ResetAction();
@@ -76,4 +93,29 @@ public class UIManager : MonoBehaviour
         battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
     }
 
+    // Update XP UI (XP text and level)
+    public void UpdateXPUI(int xp, int level)
+    {
+        xpText.text = "XP: " + xp;
+        levelText.text = "Level: " + level;
+    }
+
+    // Show XP+ text briefly after battle and update XP bar
+    public void ShowXPReward(int xpGained, int currentXP, int xpToNextLevel)
+    {
+        xpGainText.text = "+" + xpGained;
+        xpGainText.gameObject.SetActive(true); // Show XP+
+        xpBar.value = (float)currentXP / xpToNextLevel; // Update XP bar
+
+        StartCoroutine(HideXPText()); // Hide XP+ after a few seconds
+    }
+
+    private IEnumerator HideXPText()
+    {
+        yield return new WaitForSeconds(2f); // Wait 2 seconds
+        xpGainText.gameObject.SetActive(false); // Hide XP+
+    }
 }
+
+
+

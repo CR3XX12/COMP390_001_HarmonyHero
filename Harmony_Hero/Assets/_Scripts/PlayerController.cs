@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private InputSystem_Actions _inputs;
     [SerializeField] private Vector2 _move;
-    [SerializeField] private float _velocity;
+    [SerializeField] private float _velocity = 3;
 
     private LevelController _levelController;
 

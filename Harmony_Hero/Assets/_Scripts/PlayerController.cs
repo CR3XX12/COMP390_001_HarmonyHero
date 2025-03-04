@@ -97,12 +97,12 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(0.1f);  // Small delay to allow UIManager to initialize
 
-        UIManager uiManager = FindFirstObjectByType<UIManager>();
+        //UIManager uiManager = FindFirstObjectByType<UIManager>();
 
-        if (uiManager != null)
-        {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
-        }
+        //if (uiManager != null)
+        //{
+        //    uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
+        //}
     }
 
 

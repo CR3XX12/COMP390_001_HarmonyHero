@@ -3,6 +3,8 @@ using UnityEngine.Windows;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Cinemachine;
+using System.Collections.Generic;
 
 
 public class PlayerController : MonoBehaviour
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private Slider xpBar;
     private Slider healthBar;
 
-
+    public CinemachineRotationComposer composer;
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+
         _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
         // Load saved player data if available
         if (DataKeeper.Instance != null)
@@ -75,8 +78,20 @@ public class PlayerController : MonoBehaviour
 
         // Delay UI Update to Prevent NULL Errors
         StartCoroutine(DelayedUIUpdate());
+        _inputs.Player.Attack.performed += context => LeftTurn();
+        _inputs.Player.Heal.performed += context => RightTurn();
+    }
+    public void LeftTurn()
+    {
+        Debug.Log("Left Turn");
+        transform.Rotate(Vector3.up, -30f);
     }
 
+    public void RightTurn()
+    {
+        Debug.Log("Right Turn");
+        transform.Rotate(Vector3.up, 30f);
+    }
     // Coroutine to Delay UI Update for 0.1 seconds
     private IEnumerator DelayedUIUpdate()
     {
@@ -95,7 +110,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         _playerDamage = _playerHealth * 0.5f;
-        Vector3 movement = new Vector3(_move.x * _velocity * Time.fixedDeltaTime, 0.0f, _move.y * _velocity * Time.fixedDeltaTime);
+        Vector3 movement = transform.forward * _move.y * _velocity * Time.fixedDeltaTime +
+                   transform.right * _move.x * _velocity * Time.fixedDeltaTime;
+
         _controller.Move(movement);
 
         // Save before losing and transition

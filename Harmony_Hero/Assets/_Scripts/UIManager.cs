@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using UnityEngine.Windows;
 
 public class UIManager : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class UIManager : MonoBehaviour
 
 
     [SerializeField] private GameObject battleManager;
+    private InputSystem_Actions _inputs;
 
-   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -44,9 +45,17 @@ public class UIManager : MonoBehaviour
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
                 
         ResetDialogue();
-        ResetAction();      
-    }
+        ResetAction();
 
+        _inputs = new InputSystem_Actions();
+    }
+    private void OnEnable() => _inputs.Enable();
+    private void OnDisable() => _inputs.Disable();
+    private void Start()
+    {
+        _inputs.Player.Attack.performed += context => PressedAttack();
+        _inputs.Player.Heal.performed += context => PressedHeal();
+    }
     // Update is called once per frame
     void Update()
     {

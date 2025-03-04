@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SpaceBarController : MonoBehaviour
 {
@@ -12,12 +13,21 @@ public class SpaceBarController : MonoBehaviour
     // Perfect 0.8
     // Pass 0.75 to 0.85
 
+    private InputSystem_Actions _inputs;
+    private void Awake()
+    {
+        _inputs = new InputSystem_Actions();
+    }
+    private void OnEnable() => _inputs.Enable();
+    private void OnDisable() => _inputs.Disable();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         battleManager = GameObject.Find("BattleManager");
         _actionBar = GameObject.Find("ActionBar");
         _actionBar.GetComponent<Slider>().value = 1f;
+
+        _inputs.Player.Jump.performed += context => PressedSpaceBar();
     }
 
     // Update is called once per frame
@@ -29,19 +39,34 @@ public class SpaceBarController : MonoBehaviour
             _actionBar.GetComponent<Slider>().value = Mathf.Repeat(Time.time * speed, 1f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
+        //    {
+        //        CheckHit();
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Fail");
+        //        battleManager.GetComponent<BattleManager>().ResetKeys();
+        //        battleManager.GetComponent<BattleManager>().ResetKeysUI();
+        //        BarReset();
+        //    }
+        //}
+    }
+
+    void PressedSpaceBar()
+    {
+        if (battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
         {
-            if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
-            {
-                CheckHit();
-            }
-            else
-            {
-                Debug.Log("Fail");
-                battleManager.GetComponent<BattleManager>().ResetKeys();
-                battleManager.GetComponent<BattleManager>().ResetKeysUI();
-                BarReset();
-            }
+            CheckHit();
+        }
+        else
+        {
+            Debug.Log("Fail");
+            battleManager.GetComponent<BattleManager>().ResetKeys();
+            battleManager.GetComponent<BattleManager>().ResetKeysUI();
+            BarReset();
         }
     }
 

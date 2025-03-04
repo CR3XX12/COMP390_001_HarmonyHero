@@ -1988,7 +1988,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330137572}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.30517748, y: -3.200647e-15, z: 1.0256956e-15, w: 0.95229554}
+  m_LocalRotation: {x: 0.035646185, y: -0.00000000946627, z: 3.3765102e-10, w: 0.9993645}
   m_LocalPosition: {x: -0.91, y: 6, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3524,7 +3524,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 8.404898, y: 10.177113, z: 13.362827}
   m_Center: {x: 0.09244943, y: 3.8487768, z: -0.4899087}
@@ -3680,7 +3680,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 8.411444, y: 9.649782, z: 9.731955}
   m_Center: {x: 0.017868519, y: 3.5851107, z: 0.002863884}
@@ -7323,6 +7323,7 @@ Transform:
   - {fileID: 1764561917}
   - {fileID: 1063042066}
   - {fileID: 749301671}
+  - {fileID: 1496404704}
   m_Father: {fileID: 1917052509}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1048913559
@@ -7343,6 +7344,12 @@ MonoBehaviour:
   battlePath4: {fileID: 10728468}
   battlePath5: {fileID: 1785965968}
   battlePath6: {fileID: 1764561916}
+  battlePoint1: {fileID: 1329424808}
+  battlePoint2: {fileID: 2034017485}
+  battlePoint3: {fileID: 567373555}
+  battlePoint4: {fileID: 1093126045}
+  battlePoint5: {fileID: 1235769776}
+  battlePoint6: {fileID: 521208984}
 --- !u!1001 &1051270689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7633,7 +7640,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 11.935986, y: 10.697996, z: 7.7417617}
   m_Center: {x: -1.084315, y: 4.8431215, z: 0.02502251}
@@ -8696,7 +8703,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 11.2624235, y: 9.937331, z: 11.306878}
   m_Center: {x: -0.17640974, y: 3.9686675, z: -0.049708374}
@@ -9776,7 +9783,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 8.411445, y: 6.4099965, z: 9.063992}
   m_Center: {x: -0.15099812, y: 2.205002, z: -0.27155542}
@@ -11160,7 +11167,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
+  TargetOffset: {x: 0, y: 4.5, z: 0}
   Damping: {x: 0.5, y: 0.5}
   Lookahead:
     Enabled: 0
@@ -11237,7 +11244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454660539}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.30517742, y: -3.4578534e-15, z: 1.8283003e-15, w: 0.95229554}
+  m_LocalRotation: {x: 0.035646185, y: -0.00000000946627, z: 3.3765088e-10, w: 0.9993645}
   m_LocalPosition: {x: -0.91, y: 6, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -11662,7 +11669,7 @@ Transform:
   m_GameObject: {fileID: 1496404703}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -69.1, y: -21.8, z: -45}
+  m_LocalPosition: {x: -38.8, y: 0, z: -38.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11672,7 +11679,7 @@ Transform:
   - {fileID: 1093126042}
   - {fileID: 958151801}
   - {fileID: 387609544}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1048913558}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1496509480
 PrefabInstance:
@@ -15542,7 +15549,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 8.411445, y: 6.4099965, z: 9.063992}
   m_Center: {x: -0.15099907, y: 2.205002, z: -0.2715516}
@@ -16254,7 +16261,6 @@ SceneRoots:
   - {fileID: 1917052509}
   - {fileID: 2974269929147593260}
   - {fileID: 366499557}
-  - {fileID: 1496404704}
   - {fileID: 1877538029}
   - {fileID: 853868134}
   - {fileID: 1224111092}

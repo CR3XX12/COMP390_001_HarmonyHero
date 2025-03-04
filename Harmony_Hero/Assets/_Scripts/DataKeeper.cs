@@ -7,8 +7,8 @@ public class DataKeeper : MonoBehaviour
     // Player Stats
     public float savedHealth = 1f;
     public int savedXP = 0;
-    public int savedLevel = 1;
-    public int savedXPToNextLevel = 100;
+    public int savedLevel;
+    public int savedXPToNextLevel;
 
     private void Awake()
     {
@@ -22,6 +22,29 @@ public class DataKeeper : MonoBehaviour
         DontDestroyOnLoad(gameObject); // Keeps data persistent across scenes
     }
 
+    private void Start()
+    {
+        PlayerData playerData = SaveGameManager.Instance().LoadGame();
+
+        if(playerData != null)
+        {
+            Debug.Log("From Load Game");
+            Debug.Log("Health: " + playerData.health);
+            Debug.Log("Level: " + playerData.level);
+            Debug.Log("XP: " + playerData.Xp);
+
+            savedHealth = float.Parse(playerData.health);
+            savedLevel = int.Parse(playerData.level);
+            savedXP = int.Parse(playerData.Xp);
+
+            savedXPToNextLevel = savedLevel * 50;
+        }
+        else
+        {
+            Debug.Log("No saved game data found.");
+        }
+    }
+
     public void SavePlayerData(PlayerController player)
     {
         savedHealth = player._playerHealth;
@@ -32,7 +55,15 @@ public class DataKeeper : MonoBehaviour
 
     public void LoadPlayerData(PlayerController player)
     {
-        player._playerHealth = savedHealth;
+        
+        if (savedHealth > 0)
+        {
+            player._playerHealth = savedHealth;
+        }
+        else
+        {
+            player._playerHealth = 0.1f;
+        }
         player._playerXP = savedXP;
         player._playerLevel = savedLevel;
         player._xpToNextLevel = savedXPToNextLevel;

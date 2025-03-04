@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider xpBar;   // XP progress bar
 
 
+
     [SerializeField] private GameObject battleManager;
 
    

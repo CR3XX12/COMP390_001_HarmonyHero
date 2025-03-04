@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
-
         // Load saved player data if available
         if (DataKeeper.Instance != null)
         {

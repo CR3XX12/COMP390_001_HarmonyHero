@@ -6,27 +6,39 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public float _enemyDamage = 0.1f;
     [SerializeField] public bool isAttacked;
     [SerializeField] public GameObject _player;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         isAttacked = false;
         _player = GameObject.Find("Player");
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (_enemyHealth <= 0.05f)
+        if (_enemyHealth <= 0f) 
         {
-            LevelController levelController = GameObject.Find("LevelController").GetComponent<LevelController>();
-            levelController.WinScene();
+            // Get PlayerController and reward XP
+            PlayerController player = _player.GetComponent<PlayerController>();
+            player.GainXP(50);  // Reward XP for winning the battle
+
+            // Ensure XP and Level progress are saved before transitioning
+            if (DataKeeper.Instance != null)
+            {
+                DataKeeper.Instance.SavePlayerData(player);
+            }
+
+            // Find and call LevelController to load the Win Scene
+            LevelController levelController = FindFirstObjectByType<LevelController>();
+            if (levelController != null)
+            {
+                levelController.WinScene(); // Load WinScene
+            }
         }
 
         if (isAttacked)
         {
             EnemyAttack();
         }
-
     }
 
     public void EnemyAttack()

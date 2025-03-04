@@ -4,6 +4,12 @@ public class DataKeeper : MonoBehaviour
 {
     public static DataKeeper Instance;
 
+    // Player Stats
+    public float savedHealth = 1f;
+    public int savedXP = 0;
+    public int savedLevel;
+    public int savedXPToNextLevel;
+
     private void Awake()
     {
         if (Instance != null)
@@ -13,18 +19,53 @@ public class DataKeeper : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-    }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
+        DontDestroyOnLoad(gameObject); // Keeps data persistent across scenes
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
+    {
+        PlayerData playerData = SaveGameManager.Instance().LoadGame();
+
+        if(playerData != null)
+        {
+            Debug.Log("From Load Game");
+            Debug.Log("Health: " + playerData.health);
+            Debug.Log("Level: " + playerData.level);
+            Debug.Log("XP: " + playerData.Xp);
+
+            savedHealth = float.Parse(playerData.health);
+            savedLevel = int.Parse(playerData.level);
+            savedXP = int.Parse(playerData.Xp);
+
+            savedXPToNextLevel = savedLevel * 50;
+        }
+        else
+        {
+            Debug.Log("No saved game data found.");
+        }
+    }
+
+    public void SavePlayerData(PlayerController player)
+    {
+        savedHealth = player._playerHealth;
+        savedXP = player._playerXP;
+        savedLevel = player._playerLevel;
+        savedXPToNextLevel = player._xpToNextLevel;
+    }
+
+    public void LoadPlayerData(PlayerController player)
     {
         
+        if (savedHealth > 0)
+        {
+            player._playerHealth = savedHealth;
+        }
+        else
+        {
+            player._playerHealth = 0.1f;
+        }
+        player._playerXP = savedXP;
+        player._playerLevel = savedLevel;
+        player._xpToNextLevel = savedXPToNextLevel;
     }
 }

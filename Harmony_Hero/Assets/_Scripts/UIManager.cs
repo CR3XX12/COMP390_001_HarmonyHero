@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,9 +14,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
 
+    // XP UI   
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private Slider xpBar;   // XP progress bar
+
+
+
     [SerializeField] private GameObject battleManager;
+
+   
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         battleManager = GameObject.Find("BattleManager");
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
@@ -26,18 +36,29 @@ public class UIManager : MonoBehaviour
         attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
         healTxt = battleKeys.transform.Find("HealTxt").gameObject;
 
-        playerHealth.GetComponent<Slider>().value = 1f;
-        enemyHealth.GetComponent<Slider>().value = 1f;
+        if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
+        if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
 
+        // Assign UI Elements properly
+        levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
+                
         ResetDialogue();
-        ResetAction();
+        ResetAction();      
     }
 
     // Update is called once per frame
     void Update()
     {
-        playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
-        enemyHealth.GetComponent<Slider>().value = GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyHealth;
+        if (playerHealth != null && GameObject.Find("Player") != null)
+        {
+            playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
+        }
+
+        if (enemyHealth != null && GameObject.Find("EnemyAI") != null)
+        {
+            enemyHealth.GetComponent<Slider>().value = GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyHealth;
+        }
     }
 
     public void ResetAction()
@@ -76,4 +97,32 @@ public class UIManager : MonoBehaviour
         battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
     }
 
+    public void UpdateXPUI(int xp, int level, int xpToNextLevel)
+    {        
+
+        if (levelText != null)
+        {
+            levelText.text = "lv." + level.ToString();           
+        }
+        else
+        {
+            Debug.LogError("[UIManager] Level Text is NULL!");
+        }
+
+        if (xpBar != null)
+        {
+            xpBar.maxValue = xpToNextLevel;  // Set XP bar's max value
+            xpBar.value = xp;  // Set XP bar's current value            
+        }
+        else
+        {
+            Debug.LogError("[UIManager] XP Bar is NULL!");
+        }
+    }
+
+
+
 }
+
+
+

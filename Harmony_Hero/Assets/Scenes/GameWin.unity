@@ -586,7 +586,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: +EXP 100
+  m_text: +EXP 50
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
   m_sharedMaterial: {fileID: 1303159911859233479, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
@@ -1110,7 +1110,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 308252784}
         m_TargetAssemblyTypeName: LevelController, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: MainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

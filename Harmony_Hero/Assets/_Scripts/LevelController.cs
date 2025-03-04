@@ -14,7 +14,7 @@ public class LevelController : MonoBehaviour
 
     public void LoseScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(4);
     }
 
     public void LevelScene()

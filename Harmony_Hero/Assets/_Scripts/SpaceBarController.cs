@@ -9,8 +9,10 @@ public class SpaceBarController : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] private Button actionButton;
     [SerializeField] private GameObject battleManager;
-    // Perfect 0.8
-    // Pass 0.75 to 0.85
+    [SerializeField] private AudioClip hitSound;
+    [SerializeField] private AudioClip missSound;
+
+    private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,6 +20,16 @@ public class SpaceBarController : MonoBehaviour
         battleManager = GameObject.Find("BattleManager");
         _actionBar = GameObject.Find("ActionBar");
         _actionBar.GetComponent<Slider>().value = 1f;
+
+        // Setup Audio Source
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f; // Ensure 2D sound
     }
 
     // Update is called once per frame
@@ -31,12 +43,13 @@ public class SpaceBarController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
+            if (battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
             {
                 CheckHit();
             }
             else
             {
+                PlayMissSound();
                 Debug.Log("Fail");
                 battleManager.GetComponent<BattleManager>().ResetKeys();
                 battleManager.GetComponent<BattleManager>().ResetKeysUI();
@@ -68,27 +81,70 @@ public class SpaceBarController : MonoBehaviour
 
         if (actionPoint >= 0.75f && actionPoint <= 0.85f)
         {
+            PlayHitSound();
             Debug.Log("Perfect");
             actionButton.onClick.Invoke();
         }
         else if (actionPoint >= 0.7f && actionPoint < 0.75f)
         {
+            PlayHitSound();
             Debug.Log("Pass");
             actionButton.onClick.Invoke();
         }
         else if (actionPoint > 0.85f && actionPoint < 0.9f)
         {
+            PlayHitSound();
             Debug.Log("Pass");
             actionButton.onClick.Invoke();
         }
         else
         {
+            PlayMissSound();
             Debug.Log("Miss");
             battleManager.GetComponent<BattleManager>().ResetKeys();
             battleManager.GetComponent<BattleManager>().ResetKeysUI();
             BarReset();
         }
-
-
     }
+
+    private void PlayHitSound()
+    {
+        if (hitSound != null)
+        {
+            GameObject soundObject = new GameObject("TempAudio");
+            AudioSource tempAudio = soundObject.AddComponent<AudioSource>();
+
+            tempAudio.clip = hitSound;
+            tempAudio.playOnAwake = false;
+            tempAudio.spatialBlend = 0f; // Ensure 2D sound
+            tempAudio.Play();
+
+            Destroy(soundObject, hitSound.length);
+        }
+        else
+        {
+            Debug.LogWarning("No Hit Sound assigned!");
+        }
+    }
+
+    private void PlayMissSound()
+    {
+        if (hitSound != null)
+        {
+            GameObject soundObject = new GameObject("TempAudio");
+            AudioSource tempAudio = soundObject.AddComponent<AudioSource>();
+
+            tempAudio.clip = missSound;
+            tempAudio.playOnAwake = false;
+            tempAudio.spatialBlend = 0f; // Ensure 2D sound
+            tempAudio.Play();
+
+            Destroy(soundObject, missSound.length);
+        }
+        else
+        {
+            Debug.LogWarning("No Miss Sound assigned!");
+        }
+    }
+
 }

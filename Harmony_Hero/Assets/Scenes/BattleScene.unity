@@ -1664,7 +1664,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Attack
+  m_text: Attack (F)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
   m_sharedMaterial: {fileID: 1303159911859233479, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
@@ -1803,7 +1803,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 72.6
+  field of view: 60
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -2795,6 +2795,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3452549310120178359, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3545206948154873706, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986183271203167076, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
@@ -4240,6 +4244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cba24359244f4546b7c2fd626035fe7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  reminder: {fileID: 0}
 --- !u!4 &810183726
 Transform:
   m_ObjectHideFlags: 0
@@ -5393,7 +5398,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Heal
+  m_text: Heal (H)
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
   m_sharedMaterial: {fileID: 1303159911859233479, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
@@ -9817,6 +9822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1837393145}
   - component: {fileID: 1837393144}
+  - component: {fileID: 1837393148}
   - component: {fileID: 1837393147}
   - component: {fileID: 1837393146}
   m_Layer: 0
@@ -9850,7 +9856,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 72.6
+    FieldOfView: 60
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 1000
@@ -9891,7 +9897,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837393141}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4549f3274d5b40a40907d02dd47da316, type: 3}
   m_Name: 
@@ -9901,8 +9907,6 @@ MonoBehaviour:
   panSpeed: 2
   zoomInSize: 4.5
   defaultZoomSize: 5.5
-  bobAmount: 0.1
-  bobSpeed: 2
   shakeIntensity: 1
   shakeTime: 0.2
 --- !u!114 &1837393147
@@ -9914,16 +9918,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 1837393141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Script: {fileID: 11500000, guid: 2588cc5dedbb75e49a44aada63f7b939, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TrackerSettings:
-    BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
-    AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
-    QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0, z: -10}
+  AimCollisionFilter:
+    serializedVersion: 2
+    m_Bits: 1
+  IgnoreTag: 
+  AimDistance: 200
+  NoiseCancellation: 1
+--- !u!114 &1837393148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837393141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damping: {x: 0.1, y: 0.5, z: 0.3}
+  ShoulderOffset: {x: 0.5, y: -0.4, z: 0}
+  VerticalArmLength: 1.2
+  CameraSide: 1
+  CameraDistance: 4
+  AvoidObstacles:
+    Enabled: 0
+    CollisionFilter:
+      serializedVersion: 2
+      m_Bits: 1
+    IgnoreTag: 
+    CameraRadius: 0.2
+    DampingIntoCollision: 0
+    DampingFromCollision: 0.5
 --- !u!1001 &1859431369
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11328,6 +11357,7 @@ GameObject:
   - component: {fileID: 2059155828}
   - component: {fileID: 2059155829}
   - component: {fileID: 2059155830}
+  - component: {fileID: 2059155831}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: Untagged
@@ -11395,6 +11425,21 @@ MonoBehaviour:
   speed: 0.5
   actionButton: {fileID: 1915030222}
   battleManager: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 2bdd6b15facd7ae4b84e34fb3bcdcbce, type: 3}
+  missSound: {fileID: 8300000, guid: f1d05ff8c14f86944b03481292ba81f2, type: 3}
+--- !u!114 &2059155831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059155827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 921fdbfc74696a347b52bcdc3bbdcbf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  arrowClip: {fileID: 8300000, guid: 0ddf4ce18212eee49997fcbc80789528, type: 3}
 --- !u!1001 &2062149237
 PrefabInstance:
   m_ObjectHideFlags: 0

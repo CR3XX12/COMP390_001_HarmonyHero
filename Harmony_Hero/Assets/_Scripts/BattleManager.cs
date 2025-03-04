@@ -25,7 +25,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public string actionChosen;
 
 
-
     private void Awake()
     {
         _player = GameObject.Find("Player");
@@ -39,7 +38,6 @@ public class BattleManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
         _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
         _inputs.Player.Move.performed += context => playerMove.Add(_move);
         // animation according to key pressed
@@ -58,7 +56,11 @@ public class BattleManager : MonoBehaviour
 
         InitiateMoves();
         AssignArrow();
+
+
     }
+
+
 
     public void ImplementAction()
     {

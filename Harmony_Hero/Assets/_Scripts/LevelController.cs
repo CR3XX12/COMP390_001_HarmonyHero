@@ -2,10 +2,30 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    public GameObject reminder;
+    public void NewGameReminder()
+    {
+        if(reminder != null)
+        {
+            reminder.SetActive(true);
+        }
+    }
     public void NewGameStart()
+    {
+        SaveGameManager.Instance().SaveGame(1, 0, 0, 0);
+        DataKeeper dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
+        if (dataKeeper != null)
+        {
+            dataKeeper.LoadGameFromSaveTxt();
+        }
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
+    public void LoadGame()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
+
 
     public void WinScene()
     {

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class SpaceBarController : MonoBehaviour
 {
@@ -14,6 +15,13 @@ public class SpaceBarController : MonoBehaviour
 
     private AudioSource audioSource;
 
+    private InputSystem_Actions _inputs;
+    private void Awake()
+    {
+        _inputs = new InputSystem_Actions();
+    }
+    private void OnEnable() => _inputs.Enable();
+    private void OnDisable() => _inputs.Disable();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -30,6 +38,7 @@ public class SpaceBarController : MonoBehaviour
 
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 0f; // Ensure 2D sound
+        _inputs.Player.Jump.performed += context => PressedSpaceBar();
     }
 
     // Update is called once per frame
@@ -41,20 +50,35 @@ public class SpaceBarController : MonoBehaviour
             _actionBar.GetComponent<Slider>().value = Mathf.Repeat(Time.time * speed, 1f);
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
+        //    {
+        //        CheckHit();
+        //    }
+        //    else
+        //    {
+        //        Debug.Log("Fail");
+        //        battleManager.GetComponent<BattleManager>().ResetKeys();
+        //        battleManager.GetComponent<BattleManager>().ResetKeysUI();
+        //        BarReset();
+        //    }
+        //}
+    }
+
+    void PressedSpaceBar()
+    {
+        if (battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
         {
-            if (battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
-            {
-                CheckHit();
-            }
-            else
-            {
-                PlayMissSound();
-                Debug.Log("Fail");
-                battleManager.GetComponent<BattleManager>().ResetKeys();
-                battleManager.GetComponent<BattleManager>().ResetKeysUI();
-                BarReset();
-            }
+            CheckHit();
+        }
+        else
+        {
+            PlayMissSound();
+            Debug.Log("Fail");
+            battleManager.GetComponent<BattleManager>().ResetKeys();
+            battleManager.GetComponent<BattleManager>().ResetKeysUI();
+            BarReset();
         }
     }
 

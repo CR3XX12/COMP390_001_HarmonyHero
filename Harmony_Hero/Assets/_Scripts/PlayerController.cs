@@ -3,6 +3,8 @@ using UnityEngine.Windows;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
+using Unity.Cinemachine;
+using System.Collections.Generic;
 
 
 public class PlayerController : MonoBehaviour
@@ -10,12 +12,13 @@ public class PlayerController : MonoBehaviour
     private CharacterController _controller;
     private InputSystem_Actions _inputs;
     [SerializeField] private Vector2 _move;
-    [SerializeField] private float _velocity;
+    [SerializeField] private float _velocity = 3;
 
     private LevelController _levelController;
 
     [SerializeField] public float _playerHealth;
     [SerializeField] public float _playerDamage;
+    [SerializeField] public int _playerCurrentBattle;
 
     // XP Variables
     [SerializeField] public int _playerXP = 0;
@@ -27,7 +30,7 @@ public class PlayerController : MonoBehaviour
     private Slider xpBar;
     private Slider healthBar;
 
-
+    public CinemachineRotationComposer composer;
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -42,8 +45,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
 
+        _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
         // Load saved player data if available
         if (DataKeeper.Instance != null)
         {
@@ -75,19 +78,31 @@ public class PlayerController : MonoBehaviour
 
         // Delay UI Update to Prevent NULL Errors
         StartCoroutine(DelayedUIUpdate());
+        _inputs.Player.Attack.performed += context => LeftTurn();
+        _inputs.Player.Heal.performed += context => RightTurn();
+    }
+    public void LeftTurn()
+    {
+        Debug.Log("Left Turn");
+        transform.Rotate(Vector3.up, -30f);
     }
 
+    public void RightTurn()
+    {
+        Debug.Log("Right Turn");
+        transform.Rotate(Vector3.up, 30f);
+    }
     // Coroutine to Delay UI Update for 0.1 seconds
     private IEnumerator DelayedUIUpdate()
     {
         yield return new WaitForSeconds(0.1f);  // Small delay to allow UIManager to initialize
 
-        UIManager uiManager = FindFirstObjectByType<UIManager>();
+        //UIManager uiManager = FindFirstObjectByType<UIManager>();
 
-        if (uiManager != null)
-        {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
-        }
+        //if (uiManager != null)
+        //{
+        //    uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
+        //}
     }
 
 
@@ -95,7 +110,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         _playerDamage = _playerHealth * 0.5f;
-        Vector3 movement = new Vector3(_move.x * _velocity * Time.fixedDeltaTime, 0.0f, _move.y * _velocity * Time.fixedDeltaTime);
+        Vector3 movement = transform.forward * _move.y * _velocity * Time.fixedDeltaTime +
+                   transform.right * _move.x * _velocity * Time.fixedDeltaTime;
+
         _controller.Move(movement);
 
         // Save before losing and transition
@@ -135,6 +152,7 @@ public class PlayerController : MonoBehaviour
                 LevelController levelController = FindFirstObjectByType<LevelController>();
                 if (levelController != null)
                 {
+                    _playerCurrentBattle = int.Parse(other.name);
                     levelController.BattleScene();
                 }
                 else

@@ -23,7 +23,7 @@ public class SavePointController : MonoBehaviour
     }
     private void Update()
     {
-        text.transform.Rotate(Vector3.up * 30f * Time.deltaTime);
+        text.transform.Rotate(Vector3.down * 30f * Time.deltaTime);
     }
     private void OnTriggerEnter(Collider other)
     {

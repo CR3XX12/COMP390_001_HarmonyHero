@@ -56,20 +56,11 @@ public class BattleManager : MonoBehaviour
 
         InitiateMoves();
         AssignArrow();
-        _inputs.Player.Attack.performed += context => LeftCamera();
-        _inputs.Player.Heal.performed += context => RightCamera();
+
 
     }
 
-    public void LeftCamera()
-    {
-        transform.Rotate(Vector3.up, -30f);
-    }
 
-    public void RightCamera()
-    {
-        transform.Rotate(Vector3.up, 30f);
-    }
 
     public void ImplementAction()
     {

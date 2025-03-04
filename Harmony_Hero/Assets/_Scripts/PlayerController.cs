@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] public float _playerHealth;
     [SerializeField] public float _playerDamage;
+    [SerializeField] public int _playerCurrentBattle;
 
     // XP Variables
     [SerializeField] public int _playerXP = 0;
@@ -134,6 +135,7 @@ public class PlayerController : MonoBehaviour
                 LevelController levelController = FindFirstObjectByType<LevelController>();
                 if (levelController != null)
                 {
+                    _playerCurrentBattle = int.Parse(other.name);
                     levelController.BattleScene();
                 }
                 else

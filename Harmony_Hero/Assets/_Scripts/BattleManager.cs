@@ -25,7 +25,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public string actionChosen;
 
 
-
     private void Awake()
     {
         _player = GameObject.Find("Player");
@@ -58,6 +57,8 @@ public class BattleManager : MonoBehaviour
 
         InitiateMoves();
         AssignArrow();
+
+
     }
 
     public void ImplementAction()

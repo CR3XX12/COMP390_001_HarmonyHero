@@ -20,6 +20,7 @@ public class EnemyController : MonoBehaviour
             // Get PlayerController and reward XP
             PlayerController player = _player.GetComponent<PlayerController>();
             player.GainXP(50);  // Reward XP for winning the battle
+            player._playerCurrentBattle++;
 
             // Ensure XP and Level progress are saved before transitioning
             if (DataKeeper.Instance != null)

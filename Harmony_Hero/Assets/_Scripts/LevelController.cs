@@ -12,7 +12,7 @@ public class LevelController : MonoBehaviour
     }
     public void NewGameStart()
     {
-        SaveGameManager.Instance().SaveGame(1, 0, 0);
+        SaveGameManager.Instance().SaveGame(1, 0, 0, 0);
         DataKeeper dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
         if (dataKeeper != null)
         {

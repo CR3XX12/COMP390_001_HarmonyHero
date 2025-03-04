@@ -8,6 +8,7 @@ public class PlayerData
     public string health;
     public string level;
     public string Xp;
+    public string battle;
 }
 
 [System.Serializable]
@@ -20,7 +21,7 @@ public class SaveGameManager
         return m_instance ??= new SaveGameManager();
     }
     private string _filePath = Application.persistentDataPath + "/MySaveData.txt";
-    public void SaveGame(float health, int level, int Xp )
+    public void SaveGame(float health, int level, int Xp, int battle)
     {
         var binaryFormatter = new BinaryFormatter();
         var file = File.Create(_filePath);
@@ -30,6 +31,7 @@ public class SaveGameManager
             level = level.ToString(),
             Xp = Xp.ToString(),
             health = health.ToString(),
+            battle = battle.ToString(),
         };
         binaryFormatter.Serialize(file, data);
         file.Close();

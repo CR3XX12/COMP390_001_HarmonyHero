@@ -9,6 +9,7 @@ public class DataKeeper : MonoBehaviour
     public int savedXP = 0;
     public int savedLevel;
     public int savedXPToNextLevel;
+    public int currentBattle;
 
     private void Awake()
     {
@@ -43,6 +44,8 @@ public class DataKeeper : MonoBehaviour
             savedXP = int.Parse(playerData.Xp);
 
             savedXPToNextLevel = savedLevel * 50;
+
+            currentBattle = int.Parse(playerData.battle);
         }
         else
         {
@@ -56,6 +59,7 @@ public class DataKeeper : MonoBehaviour
         savedXP = player._playerXP;
         savedLevel = player._playerLevel;
         savedXPToNextLevel = player._xpToNextLevel;
+        currentBattle = player._playerCurrentBattle;
     }
 
     public void LoadPlayerData(PlayerController player)
@@ -72,5 +76,6 @@ public class DataKeeper : MonoBehaviour
         player._playerXP = savedXP;
         player._playerLevel = savedLevel;
         player._xpToNextLevel = savedXPToNextLevel;
+        player._playerCurrentBattle = currentBattle;
     }
 }

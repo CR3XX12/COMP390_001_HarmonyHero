@@ -19,7 +19,7 @@ public class SavePointController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         DataKeeper dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
-        SaveGameManager.Instance().SaveGame(dataKeeper.savedHealth, dataKeeper.savedLevel, dataKeeper.savedXP);
+        SaveGameManager.Instance().SaveGame(dataKeeper.savedHealth, dataKeeper.savedLevel, dataKeeper.savedXP, dataKeeper.currentBattle);
 
         textComponent.text = "Saved";
         Invoke("ResetText", 3f);

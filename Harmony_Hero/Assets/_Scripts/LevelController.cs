@@ -2,6 +2,14 @@ using UnityEngine;
 
 public class LevelController : MonoBehaviour
 {
+    public GameObject reminder;
+    public void NewGameReminder()
+    {
+        if(reminder != null)
+        {
+            reminder.SetActive(true);
+        }
+    }
     public void NewGameStart()
     {
         SaveGameManager.Instance().SaveGame(1, 0, 0);

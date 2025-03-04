@@ -24,9 +24,14 @@ public class DataKeeper : MonoBehaviour
 
     private void Start()
     {
+        LoadGameFromSaveTxt();
+    }
+
+    public void LoadGameFromSaveTxt()
+    {
         PlayerData playerData = SaveGameManager.Instance().LoadGame();
 
-        if(playerData != null)
+        if (playerData != null)
         {
             Debug.Log("From Load Game");
             Debug.Log("Health: " + playerData.health);

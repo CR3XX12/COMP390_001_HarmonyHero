@@ -4,8 +4,20 @@ public class LevelController : MonoBehaviour
 {
     public void NewGameStart()
     {
+        SaveGameManager.Instance().SaveGame(1, 0, 0);
+        DataKeeper dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
+        if (dataKeeper != null)
+        {
+            dataKeeper.LoadGameFromSaveTxt();
+        }
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
+
+    public void LoadGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+    }
+
 
     public void WinScene()
     {

@@ -948,6 +948,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a24960ad6f2a0824787b50aab191cd79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  savedHealth: 1
+  savedXP: 0
+  savedLevel: 0
+  savedXPToNextLevel: 0
 --- !u!4 &1229977846
 Transform:
   m_ObjectHideFlags: 0
@@ -1214,7 +1218,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1685573382}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2001405496}
+        m_TargetAssemblyTypeName: LevelController, Assembly-CSharp
+        m_MethodName: LoadGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1685573382
 MonoBehaviour:
   m_ObjectHideFlags: 0

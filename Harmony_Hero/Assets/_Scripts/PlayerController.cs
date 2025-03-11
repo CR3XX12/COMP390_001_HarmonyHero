@@ -132,6 +132,10 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("LevelController is NULL! Make sure it exists in the scene.");
             }
         }
+        else if (_playerHealth >= 1.0f)
+        {
+            _playerHealth = 1.0f;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -161,6 +165,37 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void ActionAnimation(string option)
+    {
+        switch (option)
+        {
+            case "Idle":
+                // Idle animation
+                Debug.Log("Player Idle Animation");
+                break;
+            case "Attack":
+                // Attack animation
+                Debug.Log("Player Attacked Animation");
+                break;
+            case "Heal":
+                // Heal animation
+                Debug.Log("Player Healed Animation");
+                break;
+            case "Skill":
+                // Skill animation
+                Debug.Log("Player Skill Animation");
+                break;
+            case "Dodge":
+                // Dodge animation
+                Debug.Log("Player Dodged Animation");
+                break;
+            default:
+                Debug.LogError("Invalid Animation Option!");
+                break;
+        }
+
     }
 
     public void GainXP(int xpAmount)

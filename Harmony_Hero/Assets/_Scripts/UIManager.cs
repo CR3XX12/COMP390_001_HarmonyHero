@@ -3,14 +3,14 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using UnityEngine.Windows;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject dialogue;
+    [SerializeField] private GameObject actionTxt;
     [SerializeField] private GameObject enemyDialogue;
-    [SerializeField] private GameObject battleKeys;
-    [SerializeField] private GameObject attackTxt;
-    [SerializeField] private GameObject healTxt;
+    [SerializeField] public GameObject battleKeys;
 
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
@@ -31,11 +31,11 @@ public class UIManager : MonoBehaviour
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
         enemyHealth = GameObject.Find("EnemyHUD").transform.Find("Health").gameObject;
 
-        dialogue = GameObject.Find("Dialogue");
         enemyDialogue = GameObject.Find("EnemyDialogue");
+
         battleKeys = GameObject.Find("BattleKeys");
-        attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
-        healTxt = battleKeys.transform.Find("HealTxt").gameObject;
+        dialogue = GameObject.Find("Dialogue");
+        actionTxt = GameObject.Find("ActionTxt");
 
         if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
         if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
@@ -43,9 +43,9 @@ public class UIManager : MonoBehaviour
         // Assign UI Elements properly
         levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
-                
-        ResetDialogue();
-        ResetAction();
+
+        ResetBattleUI();
+        StartBattle();
 
         _inputs = new InputSystem_Actions();
     }
@@ -53,8 +53,9 @@ public class UIManager : MonoBehaviour
     private void OnDisable() => _inputs.Disable();
     private void Start()
     {
-        _inputs.Player.Attack.performed += context => PressedAttack();
-        _inputs.Player.Heal.performed += context => PressedHeal();
+        _inputs.Player.Attack.performed += context => PressedOption("Attack");
+        _inputs.Player.Heal.performed += context => PressedOption("Heal");
+        _inputs.Player.Skill.performed += context => PressedOption("Skill");
     }
     // Update is called once per frame
     void Update()
@@ -70,48 +71,84 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ResetAction()
+    public void ResetBattleUI()
     {
-        enemyDialogue.SetActive(true);
+        dialogue.SetActive(false);
         battleManager.SetActive(false);
         battleKeys.SetActive(false);
-        attackTxt.SetActive(false);
-        healTxt.SetActive(false);
-        Invoke("ResetDialogue", 2f);
     }
 
-    public void ResetDialogue()
+    public void StartBattle()
+    {
+        actionTxt.SetActive(false);
+        enemyDialogue.SetActive(true);
+        StartCoroutine(ShowDialogueSequence());
+    }
+
+    public void EnterBattle()
     {
         enemyDialogue.SetActive(false);
+        battleKeys.SetActive(true);
+        battleManager.SetActive(true);
+        battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
+    }
+    private IEnumerator ShowDialogueSequence()
+    {
+        ResetDialogueContent("Your melody falters before the abyss...");
+        yield return new WaitForSeconds(2f);
+
+        ResetDialogueContent("Steady now! Let the music rise...");
+        yield return new WaitForSeconds(2f);
+
+        ResetDialogueContent("For the song begins and time won¡¦t wait...");
+        yield return new WaitForSeconds(2f);
+
+        EnterBattle();
+    }
+
+    private void ResetDialogueContent(string message)
+    {
+        enemyDialogue.transform.Find("Content").gameObject.GetComponent<TextMeshProUGUI>().text = message;
+    }
+
+    public void ShowBattleOptions()
+    {
+        ResetBattleUI();
         dialogue.SetActive(true);
     }
 
-    public void PressedAttack()
+    public void PressedOption(string choice)
     {
-        dialogue.SetActive(false);
-        battleKeys.SetActive(true);
-        attackTxt.SetActive(true);
-        battleManager.SetActive(true);
-        battleManager.GetComponent<BattleManager>().actionChosen = "Attack";
-        battleManager.GetComponent<SpaceBarController>().BarReset();
-    }
+        Debug.Log("Pressed " + choice);
+        actionTxt.SetActive(true);
+        switch (choice)
+        {
+            case "Attack":               
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Strike the Chords of Reckoning";
+                break;
+            case "Heal":
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Weave a Melody of Renewal";
+                break;
+            case "Skill":
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Unleash the Harmonic Crescendo";
+                break;
+            default:
+                Debug.LogError("[UIManager] Invalid choice!");
+                break;
+        }
 
-    public void PressedHeal()
-    {
-        dialogue.SetActive(false);
-        battleKeys.SetActive(true);
-        healTxt.SetActive(true);
-        battleManager.gameObject.SetActive(true);
-        battleManager.gameObject.GetComponent<BattleManager>().actionChosen = "Heal";
-        battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
+        battleManager.GetComponent<BattleManager>().actionChosen = choice;
+        battleManager.GetComponent<BattleManager>().ImplementAction();
+        ResetBattleUI();
+        Invoke("StartBattle", 4f);
     }
 
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)
-    {        
+    {
 
         if (levelText != null)
         {
-            levelText.text = "lv." + level.ToString();           
+            levelText.text = "lv." + level.ToString();
         }
         else
         {

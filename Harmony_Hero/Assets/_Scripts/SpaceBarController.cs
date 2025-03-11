@@ -10,15 +10,18 @@ public class SpaceBarController : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] private Button actionButton;
     [SerializeField] private GameObject battleManager;
+    [SerializeField] private GameObject UIManager;
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip missSound;
 
     private AudioSource audioSource;
 
     private InputSystem_Actions _inputs;
+    [SerializeField] GameObject _enemy;
     private void Awake()
     {
         _inputs = new InputSystem_Actions();
+        _enemy = GameObject.Find("EnemyAI");
     }
     private void OnEnable() => _inputs.Enable();
     private void OnDisable() => _inputs.Disable();
@@ -26,6 +29,7 @@ public class SpaceBarController : MonoBehaviour
     void Start()
     {
         battleManager = GameObject.Find("BattleManager");
+        UIManager = GameObject.Find("UIManager");
         _actionBar = GameObject.Find("ActionBar");
         _actionBar.GetComponent<Slider>().value = 1f;
 
@@ -49,21 +53,6 @@ public class SpaceBarController : MonoBehaviour
         {
             _actionBar.GetComponent<Slider>().value = Mathf.Repeat(Time.time * speed, 1f);
         }
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
-        //    {
-        //        CheckHit();
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("Fail");
-        //        battleManager.GetComponent<BattleManager>().ResetKeys();
-        //        battleManager.GetComponent<BattleManager>().ResetKeysUI();
-        //        BarReset();
-        //    }
-        //}
     }
 
     void PressedSpaceBar()
@@ -74,11 +63,7 @@ public class SpaceBarController : MonoBehaviour
         }
         else
         {
-            PlayMissSound();
-            Debug.Log("Fail");
-            battleManager.GetComponent<BattleManager>().ResetKeys();
-            battleManager.GetComponent<BattleManager>().ResetKeysUI();
-            BarReset();
+            SpaceBarMissed();
         }
     }
 
@@ -123,14 +108,34 @@ public class SpaceBarController : MonoBehaviour
         }
         else
         {
-            PlayMissSound();
-            Debug.Log("Miss");
-            battleManager.GetComponent<BattleManager>().ResetKeys();
-            battleManager.GetComponent<BattleManager>().ResetKeysUI();
-            BarReset();
+            SpaceBarMissed();
         }
     }
 
+    void SpaceBarMissed()
+    {
+        PlayMissSound();
+        Debug.Log("Miss");
+
+        // Reset the keys when miss
+        //battleManager.GetComponent<BattleManager>().ResetKeys();
+        //battleManager.GetComponent<BattleManager>().ResetKeysUI();
+        //BarReset();
+
+        // Reset the battle when miss
+        
+        _enemy.GetComponent<EnemyController>().EnemyAttack(true);
+        UIManager.GetComponent<UIManager>().battleKeys.SetActive(false);
+        StartCoroutine(ResetBattleUIManager());
+    }
+    private IEnumerator ResetBattleUIManager()
+    {
+        yield return new WaitForSeconds(2f);
+        battleManager.GetComponent<BattleManager>().ResetBattle();
+        UIManager.GetComponent<UIManager>().ResetBattleUI();
+        UIManager.GetComponent<UIManager>().StartBattle();
+        
+    }
     private void PlayHitSound()
     {
         if (hitSound != null)

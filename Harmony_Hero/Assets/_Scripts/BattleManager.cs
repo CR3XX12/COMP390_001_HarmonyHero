@@ -65,7 +65,9 @@ public class BattleManager : MonoBehaviour
 
     public void ImplementAction()
     {
+        // player action animation
         _player.GetComponent<PlayerController>().ActionAnimation(actionChosen);
+
         if (actionChosen == "Idle")
         {
             _enemy.GetComponent<EnemyController>().EnemyAttack(false);
@@ -73,8 +75,10 @@ public class BattleManager : MonoBehaviour
         else if (actionChosen == "Attack")
         {
             Debug.Log("Player Attacked");
+            _enemy.GetComponent<EnemyController>().ActionAnimation("GetAttacked");
             _enemy.GetComponent<EnemyController>()._enemyHealth -= _player.GetComponent<PlayerController>()._playerDamage;
             _enemy.GetComponent<EnemyController>().EnemyAttack(false);
+            _player.GetComponent<PlayerController>().ActionAnimation("Dodge");
         }
         else if (actionChosen == "Heal")
         {
@@ -85,8 +89,10 @@ public class BattleManager : MonoBehaviour
         else if (actionChosen == "Skill")
         {
             Debug.Log("Player Skill");
+            _enemy.GetComponent<EnemyController>().ActionAnimation("GetAttacked");
             _enemy.GetComponent<EnemyController>()._enemyHealth -= _player.GetComponent<PlayerController>()._playerDamage * 2;
             _enemy.GetComponent<EnemyController>().EnemyAttack(false);
+            _player.GetComponent<PlayerController>().ActionAnimation("Dodge");
         }
     }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
@@ -15,28 +16,31 @@ public class EnemyController : MonoBehaviour
     {
         if (_enemyHealth <= 0f)
         {
-            // Get PlayerController and reward XP
-            PlayerController player = _player.GetComponent<PlayerController>();
-            player.GainXP(50);  // Reward XP for winning the battle
-            player._playerCurrentBattle++;
-
-            // Ensure XP and Level progress are saved before transitioning
-            if (DataKeeper.Instance != null)
-            {
-                DataKeeper.Instance.SavePlayerData(player);
-            }
-
-            // player win and enemy lose animation
-            // change scene after all animation done
-
-            // Find and call LevelController to load the Win Scene
-            LevelController levelController = FindFirstObjectByType<LevelController>();
-            if (levelController != null)
-            {
-                levelController.WinScene(); // Load WinScene
-            }
+            StartCoroutine(ChangeScene());
         }
 
+    }
+
+    private IEnumerator ChangeScene()
+    {
+        ActionAnimation("Dead");
+        yield return new WaitForSeconds(2f);
+
+        // Get PlayerController and reward XP
+        PlayerController player = _player.GetComponent<PlayerController>();
+        player.GainXP(50);  // Reward XP for winning the battle
+        player._playerCurrentBattle++;
+        // Ensure XP and Level progress are saved before transitioning
+        if (DataKeeper.Instance != null)
+        {
+            DataKeeper.Instance.SavePlayerData(player);
+        }
+        // Find and call LevelController to load the Win Scene
+        LevelController levelController = FindFirstObjectByType<LevelController>();
+        if (levelController != null)
+        {
+            levelController.WinScene(); // Load WinScene
+        }
     }
 
     public void ActionAnimation(string option)
@@ -45,12 +49,22 @@ public class EnemyController : MonoBehaviour
         if (option == "Attack")
         {
             // enemy attack animation
-            Debug.Log("Enemy Attacked");
+            Debug.Log("Enemy Attacked Animation");
+        }
+        else if (option == "GetAttacked")
+        {
+            // enemy get attacked animation
+            Debug.Log("Enemy GetAttacked Animation");
         }
         else if (option == "Wait")
         {
             // enemy wait animation
-            Debug.Log("Enemy Waited");
+            Debug.Log("Enemy Waited Animation");
+        }
+        else if (option == "Dead")
+        {
+            // enemy dead animation
+            Debug.Log("Enemy Dead Animation");
         }
     }
 
@@ -63,9 +77,6 @@ public class EnemyController : MonoBehaviour
             _enemyDamage = Random.Range(0.1f, 0.5f);
             _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
         }
-        else
-        {
-            _player.GetComponent<PlayerController>().ActionAnimation("Dodge");
-        }
+        
     }
 }

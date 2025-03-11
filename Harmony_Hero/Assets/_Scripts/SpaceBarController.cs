@@ -16,9 +16,11 @@ public class SpaceBarController : MonoBehaviour
     private AudioSource audioSource;
 
     private InputSystem_Actions _inputs;
+    [SerializeField] GameObject _enemy;
     private void Awake()
     {
         _inputs = new InputSystem_Actions();
+        _enemy = GameObject.Find("EnemyAI");
     }
     private void OnEnable() => _inputs.Enable();
     private void OnDisable() => _inputs.Disable();
@@ -49,21 +51,6 @@ public class SpaceBarController : MonoBehaviour
         {
             _actionBar.GetComponent<Slider>().value = Mathf.Repeat(Time.time * speed, 1f);
         }
-
-        //if (Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    if(battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
-        //    {
-        //        CheckHit();
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("Fail");
-        //        battleManager.GetComponent<BattleManager>().ResetKeys();
-        //        battleManager.GetComponent<BattleManager>().ResetKeysUI();
-        //        BarReset();
-        //    }
-        //}
     }
 
     void PressedSpaceBar()
@@ -79,6 +66,8 @@ public class SpaceBarController : MonoBehaviour
             battleManager.GetComponent<BattleManager>().ResetKeys();
             battleManager.GetComponent<BattleManager>().ResetKeysUI();
             BarReset();
+
+            _enemy.GetComponent<EnemyController>().EnemyAttack(true);
         }
     }
 
@@ -128,6 +117,8 @@ public class SpaceBarController : MonoBehaviour
             battleManager.GetComponent<BattleManager>().ResetKeys();
             battleManager.GetComponent<BattleManager>().ResetKeysUI();
             BarReset();
+
+
         }
     }
 

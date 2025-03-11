@@ -4,18 +4,16 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] public float _enemyHealth = 1f;
     [SerializeField] public float _enemyDamage = 0.1f;
-    [SerializeField] public bool isAttacked;
     [SerializeField] public GameObject _player;
 
     void Start()
     {
-        isAttacked = false;
         _player = GameObject.Find("Player");
     }
 
     void Update()
     {
-        if (_enemyHealth <= 0f) 
+        if (_enemyHealth <= 0f)
         {
             // Get PlayerController and reward XP
             PlayerController player = _player.GetComponent<PlayerController>();
@@ -28,6 +26,9 @@ public class EnemyController : MonoBehaviour
                 DataKeeper.Instance.SavePlayerData(player);
             }
 
+            // player win and enemy lose animation
+            // change scene after all animation done
+
             // Find and call LevelController to load the Win Scene
             LevelController levelController = FindFirstObjectByType<LevelController>();
             if (levelController != null)
@@ -36,17 +37,35 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-        if (isAttacked)
+    }
+
+    public void ActionAnimation(string option)
+    {
+        // enemy action animation
+        if (option == "Attack")
         {
-            EnemyAttack();
+            // enemy attack animation
+            Debug.Log("Enemy Attacked");
+        }
+        else if (option == "Wait")
+        {
+            // enemy wait animation
+            Debug.Log("Enemy Waited");
         }
     }
 
-    public void EnemyAttack()
+    public void EnemyAttack(bool validAttack)
     {
-        // enemy attack animation
-        _enemyDamage = Random.Range(0.1f, 0.5f);
-        _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
-        isAttacked = false;
+        this.ActionAnimation("Attack");
+
+        if (validAttack)
+        {
+            _enemyDamage = Random.Range(0.1f, 0.5f);
+            _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
+        }
+        else
+        {
+            _player.GetComponent<PlayerController>().ActionAnimation("Dodge");
+        }
     }
 }

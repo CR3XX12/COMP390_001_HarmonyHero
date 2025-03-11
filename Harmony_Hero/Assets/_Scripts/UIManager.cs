@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using TMPro;
 using UnityEngine.Windows;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject battleKeys;
     [SerializeField] private GameObject attackTxt;
     [SerializeField] private GameObject healTxt;
+    [SerializeField] private GameObject skillTxt;
 
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
@@ -31,11 +33,13 @@ public class UIManager : MonoBehaviour
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
         enemyHealth = GameObject.Find("EnemyHUD").transform.Find("Health").gameObject;
 
-        dialogue = GameObject.Find("Dialogue");
         enemyDialogue = GameObject.Find("EnemyDialogue");
+
         battleKeys = GameObject.Find("BattleKeys");
-        attackTxt = battleKeys.transform.Find("AttackTxt").gameObject;
-        healTxt = battleKeys.transform.Find("HealTxt").gameObject;
+        dialogue = GameObject.Find("Dialogue");
+        attackTxt = dialogue.transform.Find("AttackTxt").gameObject;
+        healTxt = dialogue.transform.Find("HealTxt").gameObject;
+        skillTxt = dialogue.transform.Find("SkillTxt").gameObject;
 
         if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
         if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
@@ -43,9 +47,9 @@ public class UIManager : MonoBehaviour
         // Assign UI Elements properly
         levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
-                
-        ResetDialogue();
-        ResetAction();
+
+        ResetBattle();
+        StartBattle();
 
         _inputs = new InputSystem_Actions();
     }
@@ -53,8 +57,9 @@ public class UIManager : MonoBehaviour
     private void OnDisable() => _inputs.Disable();
     private void Start()
     {
-        _inputs.Player.Attack.performed += context => PressedAttack();
-        _inputs.Player.Heal.performed += context => PressedHeal();
+        _inputs.Player.Attack.performed += context => PressedOption("Attack");
+        _inputs.Player.Heal.performed += context => PressedOption("Heal");
+        _inputs.Player.Skill.performed += context => PressedOption("Skill");
     }
     // Update is called once per frame
     void Update()
@@ -70,48 +75,89 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ResetAction()
+    public void ResetBattle()
     {
-        enemyDialogue.SetActive(true);
+        dialogue.SetActive(false);
         battleManager.SetActive(false);
         battleKeys.SetActive(false);
         attackTxt.SetActive(false);
         healTxt.SetActive(false);
-        Invoke("ResetDialogue", 2f);
+        skillTxt.SetActive(false);
     }
 
-    public void ResetDialogue()
+    public void StartBattle()
+    {
+        enemyDialogue.SetActive(true);
+        StartCoroutine(ShowDialogueSequence());
+    }
+
+    public void EnterBattle()
     {
         enemyDialogue.SetActive(false);
+        battleKeys.SetActive(true);
+        battleManager.SetActive(true);
+        battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
+    }
+    private IEnumerator ShowDialogueSequence()
+    {
+        ResetDialogueContent("Your melody falters before the abyss...");
+        yield return new WaitForSeconds(2f); // Wait 1 second
+
+        ResetDialogueContent("Steady now! Let the music rise...");
+        yield return new WaitForSeconds(2f); // Wait 1 second
+
+        ResetDialogueContent("For the song begins and time won¡¦t wait...");
+        yield return new WaitForSeconds(2f); // Wait 1 second
+
+        EnterBattle();
+    }
+
+    private void ResetDialogueContent(string message)
+    {
+        enemyDialogue.transform.Find("Content").gameObject.GetComponent<TextMeshProUGUI>().text = message;
+    }
+
+    public void ShowBattleOptions()
+    {
+        ResetBattle();
         dialogue.SetActive(true);
     }
 
-    public void PressedAttack()
+    public void PressedOption(string choice)
     {
-        dialogue.SetActive(false);
-        battleKeys.SetActive(true);
-        attackTxt.SetActive(true);
-        battleManager.SetActive(true);
-        battleManager.GetComponent<BattleManager>().actionChosen = "Attack";
-        battleManager.GetComponent<SpaceBarController>().BarReset();
-    }
+        GameObject choiceUI = null;
 
-    public void PressedHeal()
-    {
-        dialogue.SetActive(false);
-        battleKeys.SetActive(true);
-        healTxt.SetActive(true);
-        battleManager.gameObject.SetActive(true);
-        battleManager.gameObject.GetComponent<BattleManager>().actionChosen = "Heal";
-        battleManager.GetComponent<SpaceBarController>().speed = 0.5f;
+        switch (choice)
+        {
+            case "Attack":
+                choiceUI = attackTxt;
+                break;
+            case "Heal":
+                choiceUI = healTxt;
+                break;
+            case "Skill":
+                choiceUI = skillTxt;
+                break;
+            default:
+                Debug.LogError("[UIManager] Invalid choice!");
+                break;
+        }
+
+        choiceUI.SetActive(true);
+        battleManager.GetComponent<BattleManager>().actionChosen = choice;
+        battleManager.GetComponent<BattleManager>().ImplementAction();
+        ResetBattle();
+        Invoke("StartBattle", 2f);
+
+       
     }
 
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)
-    {        
+    {
 
         if (levelText != null)
         {
-            levelText.text = "lv." + level.ToString();           
+            levelText.text = "lv." + level.ToString();
         }
         else
         {

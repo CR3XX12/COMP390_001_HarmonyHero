@@ -8,11 +8,9 @@ using Unity.VisualScripting;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] private GameObject dialogue;
+    [SerializeField] private GameObject actionTxt;
     [SerializeField] private GameObject enemyDialogue;
-    [SerializeField] private GameObject battleKeys;
-    [SerializeField] private GameObject attackTxt;
-    [SerializeField] private GameObject healTxt;
-    [SerializeField] private GameObject skillTxt;
+    [SerializeField] public GameObject battleKeys;
 
     [SerializeField] private GameObject playerHealth;
     [SerializeField] private GameObject enemyHealth;
@@ -37,9 +35,7 @@ public class UIManager : MonoBehaviour
 
         battleKeys = GameObject.Find("BattleKeys");
         dialogue = GameObject.Find("Dialogue");
-        attackTxt = dialogue.transform.Find("AttackTxt").gameObject;
-        healTxt = dialogue.transform.Find("HealTxt").gameObject;
-        skillTxt = dialogue.transform.Find("SkillTxt").gameObject;
+        actionTxt = GameObject.Find("ActionTxt");
 
         if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
         if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
@@ -48,7 +44,7 @@ public class UIManager : MonoBehaviour
         levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
 
-        ResetBattle();
+        ResetBattleUI();
         StartBattle();
 
         _inputs = new InputSystem_Actions();
@@ -75,18 +71,16 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ResetBattle()
+    public void ResetBattleUI()
     {
         dialogue.SetActive(false);
         battleManager.SetActive(false);
         battleKeys.SetActive(false);
-        attackTxt.SetActive(false);
-        healTxt.SetActive(false);
-        skillTxt.SetActive(false);
     }
 
     public void StartBattle()
     {
+        actionTxt.SetActive(false);
         enemyDialogue.SetActive(true);
         StartCoroutine(ShowDialogueSequence());
     }
@@ -101,13 +95,13 @@ public class UIManager : MonoBehaviour
     private IEnumerator ShowDialogueSequence()
     {
         ResetDialogueContent("Your melody falters before the abyss...");
-        yield return new WaitForSeconds(2f); // Wait 1 second
+        yield return new WaitForSeconds(2f);
 
         ResetDialogueContent("Steady now! Let the music rise...");
-        yield return new WaitForSeconds(2f); // Wait 1 second
+        yield return new WaitForSeconds(2f);
 
         ResetDialogueContent("For the song begins and time won¡¦t wait...");
-        yield return new WaitForSeconds(2f); // Wait 1 second
+        yield return new WaitForSeconds(2f);
 
         EnterBattle();
     }
@@ -119,37 +113,34 @@ public class UIManager : MonoBehaviour
 
     public void ShowBattleOptions()
     {
-        ResetBattle();
+        ResetBattleUI();
         dialogue.SetActive(true);
     }
 
     public void PressedOption(string choice)
     {
-        GameObject choiceUI = null;
-
+        Debug.Log("Pressed " + choice);
+        actionTxt.SetActive(true);
         switch (choice)
         {
-            case "Attack":
-                choiceUI = attackTxt;
+            case "Attack":               
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Strike the Chords of Reckoning";
                 break;
             case "Heal":
-                choiceUI = healTxt;
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Weave a Melody of Renewal";
                 break;
             case "Skill":
-                choiceUI = skillTxt;
+                actionTxt.transform.Find("Content").GetComponent<TextMeshProUGUI>().text = "Unleash the Harmonic Crescendo";
                 break;
             default:
                 Debug.LogError("[UIManager] Invalid choice!");
                 break;
         }
 
-        choiceUI.SetActive(true);
         battleManager.GetComponent<BattleManager>().actionChosen = choice;
         battleManager.GetComponent<BattleManager>().ImplementAction();
-        ResetBattle();
-        Invoke("StartBattle", 2f);
-
-       
+        ResetBattleUI();
+        Invoke("StartBattle", 4f);
     }
 
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)

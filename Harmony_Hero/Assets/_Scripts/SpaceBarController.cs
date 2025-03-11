@@ -10,6 +10,7 @@ public class SpaceBarController : MonoBehaviour
     [SerializeField] public float speed;
     [SerializeField] private Button actionButton;
     [SerializeField] private GameObject battleManager;
+    [SerializeField] private GameObject UIManager;
     [SerializeField] private AudioClip hitSound;
     [SerializeField] private AudioClip missSound;
 
@@ -28,6 +29,7 @@ public class SpaceBarController : MonoBehaviour
     void Start()
     {
         battleManager = GameObject.Find("BattleManager");
+        UIManager = GameObject.Find("UIManager");
         _actionBar = GameObject.Find("ActionBar");
         _actionBar.GetComponent<Slider>().value = 1f;
 
@@ -61,13 +63,7 @@ public class SpaceBarController : MonoBehaviour
         }
         else
         {
-            PlayMissSound();
-            Debug.Log("Fail");
-            battleManager.GetComponent<BattleManager>().ResetKeys();
-            battleManager.GetComponent<BattleManager>().ResetKeysUI();
-            BarReset();
-
-            _enemy.GetComponent<EnemyController>().EnemyAttack(true);
+            SpaceBarMissed();
         }
     }
 
@@ -112,16 +108,34 @@ public class SpaceBarController : MonoBehaviour
         }
         else
         {
-            PlayMissSound();
-            Debug.Log("Miss");
-            battleManager.GetComponent<BattleManager>().ResetKeys();
-            battleManager.GetComponent<BattleManager>().ResetKeysUI();
-            BarReset();
-
-
+            SpaceBarMissed();
         }
     }
 
+    void SpaceBarMissed()
+    {
+        PlayMissSound();
+        Debug.Log("Miss");
+
+        // Reset the keys when miss
+        //battleManager.GetComponent<BattleManager>().ResetKeys();
+        //battleManager.GetComponent<BattleManager>().ResetKeysUI();
+        //BarReset();
+
+        // Reset the battle when miss
+        
+        _enemy.GetComponent<EnemyController>().EnemyAttack(true);
+        UIManager.GetComponent<UIManager>().battleKeys.SetActive(false);
+        StartCoroutine(ResetBattleUIManager());
+    }
+    private IEnumerator ResetBattleUIManager()
+    {
+        yield return new WaitForSeconds(2f);
+        battleManager.GetComponent<BattleManager>().ResetBattle();
+        UIManager.GetComponent<UIManager>().ResetBattleUI();
+        UIManager.GetComponent<UIManager>().StartBattle();
+        
+    }
     private void PlayHitSound()
     {
         if (hitSound != null)

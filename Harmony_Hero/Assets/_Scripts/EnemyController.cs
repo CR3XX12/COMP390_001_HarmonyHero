@@ -1,15 +1,20 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] public float _enemyHealth = 1f;
+    [SerializeField] public int _enemyLevel;
     [SerializeField] public float _enemyDamage = 0.1f;
     [SerializeField] public GameObject _player;
+    [SerializeField] public DataKeeper _datakeeper;
 
     void Start()
     {
         _player = GameObject.Find("Player");
+        _datakeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
+        _enemyLevel = _datakeeper.currentBattle;
     }
 
     void Update()

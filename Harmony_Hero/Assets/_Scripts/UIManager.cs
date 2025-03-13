@@ -16,7 +16,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject enemyHealth;
 
     // XP UI   
-    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI enemyLevelText;
+    [SerializeField] private TextMeshProUGUI playerLevelText;
     [SerializeField] private Slider xpBar;   // XP progress bar
 
 
@@ -41,7 +42,8 @@ public class UIManager : MonoBehaviour
         if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
 
         // Assign UI Elements properly
-        levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        enemyLevelText = GameObject.Find("EnemyHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        playerLevelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
 
         ResetBattleUI();
@@ -56,6 +58,8 @@ public class UIManager : MonoBehaviour
         _inputs.Player.Attack.performed += context => PressedOption("Attack");
         _inputs.Player.Heal.performed += context => PressedOption("Heal");
         _inputs.Player.Skill.performed += context => PressedOption("Skill");
+
+        enemyLevelText.text = "lv. " + GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyLevel.ToString();
     }
     // Update is called once per frame
     void Update()
@@ -146,9 +150,9 @@ public class UIManager : MonoBehaviour
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)
     {
 
-        if (levelText != null)
+        if (playerLevelText != null)
         {
-            levelText.text = "lv." + level.ToString();
+            playerLevelText.text = "lv." + level.ToString();
         }
         else
         {

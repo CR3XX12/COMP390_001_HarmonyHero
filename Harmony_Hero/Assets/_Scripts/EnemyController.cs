@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 
 public class EnemyController : MonoBehaviour
 {
+    [SerializeField] public GameObject[] _prefabList;
     [SerializeField] public float _enemyHealth = 1f;
     [SerializeField] public int _enemyLevel;
     [SerializeField] public float _enemyDamage = 0.1f;
@@ -15,6 +16,13 @@ public class EnemyController : MonoBehaviour
         _player = GameObject.Find("Player");
         _datakeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
         _enemyLevel = _datakeeper.currentBattle;
+
+        GameObject newChild = Instantiate(_prefabList[_enemyLevel - 1], this.transform.position, Quaternion.identity);
+        newChild.name = "SpriteEnemy";
+        newChild.transform.SetParent(this.transform);
+        Animator animator = this.GetComponent<Animator>();
+        animator.Rebind();
+        animator.Update(0f);
     }
 
     void Update()

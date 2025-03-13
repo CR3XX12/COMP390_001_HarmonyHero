@@ -79,7 +79,8 @@ public class EnemyController : MonoBehaviour
 
         if (validAttack)
         {
-            _enemyDamage = Random.Range(0.1f, 0.5f);
+            float maxEmemyDamage = _enemyLevel * 0.1f;
+            _enemyDamage = Mathf.Round(Random.Range(0.1f, maxEmemyDamage) * 10) / 10f; //standard rounding to 1 decimal place
             _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
         }
         

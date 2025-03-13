@@ -49,7 +49,7 @@ public class BattlePathController : MonoBehaviour
         for (int i = 0; i < battlePaths.Length; i++)
         {
             bool setActive;
-            if (i <= battleIndex)
+            if (i < battleIndex)
             {
                 setActive = true;
             }
@@ -58,7 +58,7 @@ public class BattlePathController : MonoBehaviour
                 setActive = false;
             }
 
-            battlePaths[i].SetActive(i <= battleIndex);
+            battlePaths[i].SetActive(i < battleIndex);
             battlePoints[i].enabled = setActive;
         }
     }

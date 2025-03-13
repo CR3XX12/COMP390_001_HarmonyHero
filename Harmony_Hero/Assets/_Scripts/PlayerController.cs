@@ -83,13 +83,11 @@ public class PlayerController : MonoBehaviour
     }
     public void LeftTurn()
     {
-        Debug.Log("Left Turn");
         transform.Rotate(Vector3.up, -30f);
     }
 
     public void RightTurn()
     {
-        Debug.Log("Right Turn");
         transform.Rotate(Vector3.up, 30f);
     }
     // Coroutine to Delay UI Update for 0.1 seconds
@@ -109,7 +107,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        _playerDamage = _playerHealth * 0.5f;
+        float lvPortionDamage = _playerLevel * 0.01f;
+        float xpPortionDamage = (float)_playerXP / _xpToNextLevel;
+        float hpPortionDamage = _playerHealth;
+
+        _playerDamage = 0.1f + (lvPortionDamage * 0.3f + xpPortionDamage * 0.2f + hpPortionDamage * 0.5f) * 0.2f;
         Vector3 movement = transform.forward * _move.y * _velocity * Time.fixedDeltaTime +
                    transform.right * _move.x * _velocity * Time.fixedDeltaTime;
 
@@ -232,7 +234,6 @@ public class PlayerController : MonoBehaviour
         _xpToNextLevel += _playerLevel * 50;  // Increase XP needed for next level
 
         _playerHealth += 0.2f;  // Increase player health slightly
-        _playerDamage += 0.1f;  // Increase damage slightly
 
         // Save progress immediately after leveling up
         if (DataKeeper.Instance != null)

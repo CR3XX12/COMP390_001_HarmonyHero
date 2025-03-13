@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] public GameObject[] _prefabList;
     [SerializeField] public float _enemyHealth = 1f;
-    [SerializeField] public int _enemyLevel;
+    [SerializeField] public int _enemyLevel = 1;
     [SerializeField] public float _enemyDamage = 0.1f;
     [SerializeField] public GameObject _player;
     [SerializeField] public DataKeeper _datakeeper;

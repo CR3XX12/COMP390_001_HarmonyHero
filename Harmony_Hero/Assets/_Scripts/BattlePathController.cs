@@ -69,8 +69,8 @@ public class BattlePathController : MonoBehaviour
             battlePaths[i].SetActive(i < battleIndex);
             battlePoints[i].enabled = setActive;
         }
-
-        battleLights[battleIndex - 1].GetComponent<Light>().color = Color.white;
+        if(battleIndex - 1 < battleLights.Length)
+        { battleLights[battleIndex - 1].GetComponent<Light>().color = Color.white; }
     }
 
 }

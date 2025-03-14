@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
@@ -50,6 +51,11 @@ public class LevelController : MonoBehaviour
     public void MainMenu()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    public void EndGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(5);
     }
 
     public void QuitGame()

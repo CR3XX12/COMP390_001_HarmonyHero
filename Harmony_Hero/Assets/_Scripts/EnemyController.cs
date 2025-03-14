@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour
         PlayerController player = _player.GetComponent<PlayerController>();
         player.GainXP(50);  // Reward XP for winning the battle
 
-        if (_dataKeeper.enterBattle == player._playerCurrentBattle && player._playerCurrentBattle < 6)
+        if (_dataKeeper.enterBattle == player._playerCurrentBattle && player._playerCurrentBattle <= 6)
         {
             player._playerCurrentBattle++;
         }
@@ -58,7 +58,14 @@ public class EnemyController : MonoBehaviour
         LevelController levelController = FindFirstObjectByType<LevelController>();
         if (levelController != null)
         {
-            levelController.WinScene(); // Load WinScene
+            if(_player.GetComponent<PlayerController>()._playerCurrentBattle <= 6)
+            {
+                levelController.WinScene();
+            }
+            else if (_player.GetComponent<PlayerController>()._playerCurrentBattle > 6)
+            {
+                levelController.EndGame();
+            }
         }
     }
 

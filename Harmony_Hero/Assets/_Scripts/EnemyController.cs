@@ -44,7 +44,7 @@ public class EnemyController : MonoBehaviour
         PlayerController player = _player.GetComponent<PlayerController>();
         player.GainXP(50);  // Reward XP for winning the battle
 
-        if (player._playerCurrentBattle < 6)
+        if (_dataKeeper.enterBattle == player._playerCurrentBattle && player._playerCurrentBattle < 6)
         {
             player._playerCurrentBattle++;
         }

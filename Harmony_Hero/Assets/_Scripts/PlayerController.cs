@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.Cinemachine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerController : MonoBehaviour
@@ -23,6 +24,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public int _playerXP = 0;
     [SerializeField] public int _playerLevel = 1;
     [SerializeField] public int _xpToNextLevel = 100;
+    [SerializeField] public bool isInBattle;
 
     // UI Elements (For Level 1 UI)
     private TextMeshProUGUI levelText;
@@ -80,6 +82,10 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(DelayedUIUpdate());
         _inputs.Player.Attack.performed += context => LeftTurn();
         _inputs.Player.Heal.performed += context => RightTurn();
+
+        //get current scene index
+        isInBattle = SceneManager.GetActiveScene().buildIndex == 2;
+
     }
     public void LeftTurn()
     {
@@ -138,8 +144,8 @@ public class PlayerController : MonoBehaviour
         {
             _playerHealth = 1.0f;
         }
-
-        FlipSprite();
+        if(!isInBattle)
+        { FlipSprite(); }
     }
 
     void FlipSprite()

@@ -4,6 +4,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine.Windows;
 using Unity.VisualScripting;
+using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject enemyHealth;
 
     // XP UI   
-    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI enemyLevelText;
+    [SerializeField] private TextMeshProUGUI playerLevelText;
     [SerializeField] private Slider xpBar;   // XP progress bar
 
 
@@ -24,8 +26,28 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject battleManager;
     private InputSystem_Actions _inputs;
 
+    private void Awake()
+    {
+        _inputs = new InputSystem_Actions();
+    }
+
+    private void OnEnable()
+    {
+        _inputs.Enable();
+        _inputs.Player.Attack.performed += OnAttack;
+        _inputs.Player.Heal.performed += OnHeal;
+        _inputs.Player.Skill.performed += OnSkill;
+    }
+
+    private void OnDisable()
+    {
+        _inputs.Player.Attack.performed -= OnAttack;
+        _inputs.Player.Heal.performed -= OnHeal;
+        _inputs.Player.Skill.performed -= OnSkill;
+        _inputs.Disable();
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Awake()
+    void Start()
     {
         battleManager = GameObject.Find("BattleManager");
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
@@ -41,22 +63,22 @@ public class UIManager : MonoBehaviour
         if (enemyHealth != null) enemyHealth.GetComponent<Slider>().value = 1f;
 
         // Assign UI Elements properly
-        levelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        enemyLevelText = GameObject.Find("EnemyHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
+        playerLevelText = GameObject.Find("PlayerHUD")?.transform.Find("Level")?.GetComponent<TextMeshProUGUI>();
         xpBar = GameObject.Find("PlayerHUD")?.transform.Find("XPbar")?.GetComponent<Slider>();
-
+        OnDisable();
         ResetBattleUI();
         StartBattle();
+        enemyLevelText.text = "lv. " + GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyLevel.ToString();
+        playerLevelText.text = "lv. " + GameObject.Find("Player").GetComponent<PlayerController>()._playerLevel.ToString();
 
-        _inputs = new InputSystem_Actions();
     }
-    private void OnEnable() => _inputs.Enable();
-    private void OnDisable() => _inputs.Disable();
-    private void Start()
-    {
-        _inputs.Player.Attack.performed += context => PressedOption("Attack");
-        _inputs.Player.Heal.performed += context => PressedOption("Heal");
-        _inputs.Player.Skill.performed += context => PressedOption("Skill");
-    }
+
+
+    private void OnAttack(InputAction.CallbackContext context) => PressedOption("Attack");
+    private void OnHeal(InputAction.CallbackContext context) => PressedOption("Heal");
+    private void OnSkill(InputAction.CallbackContext context) => PressedOption("Skill");
+
     // Update is called once per frame
     void Update()
     {
@@ -76,6 +98,7 @@ public class UIManager : MonoBehaviour
         dialogue.SetActive(false);
         battleManager.SetActive(false);
         battleKeys.SetActive(false);
+        OnDisable();
     }
 
     public void StartBattle()
@@ -115,6 +138,7 @@ public class UIManager : MonoBehaviour
     {
         ResetBattleUI();
         dialogue.SetActive(true);
+        OnEnable();
     }
 
     public void PressedOption(string choice)
@@ -146,9 +170,9 @@ public class UIManager : MonoBehaviour
     public void UpdateXPUI(int xp, int level, int xpToNextLevel)
     {
 
-        if (levelText != null)
+        if (playerLevelText != null)
         {
-            levelText.text = "lv." + level.ToString();
+            playerLevelText.text = "lv." + level.ToString();
         }
         else
         {

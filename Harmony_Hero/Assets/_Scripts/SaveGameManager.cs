@@ -28,9 +28,9 @@ public class SaveGameManager
 
         var data = new PlayerData
         {
+            health = health.ToString(),
             level = level.ToString(),
             Xp = Xp.ToString(),
-            health = health.ToString(),
             battle = battle.ToString(),
         };
         binaryFormatter.Serialize(file, data);

@@ -10,6 +10,7 @@ public class DataKeeper : MonoBehaviour
     public int savedLevel;
     public int savedXPToNextLevel;
     public int currentBattle;
+    public int enterBattle;
 
     private void Awake()
     {
@@ -28,6 +29,11 @@ public class DataKeeper : MonoBehaviour
         LoadGameFromSaveTxt();
     }
 
+    private void Update()
+    {
+        
+    }
+
     public void LoadGameFromSaveTxt()
     {
         PlayerData playerData = SaveGameManager.Instance().LoadGame();
@@ -38,6 +44,7 @@ public class DataKeeper : MonoBehaviour
             Debug.Log("Health: " + playerData.health);
             Debug.Log("Level: " + playerData.level);
             Debug.Log("XP: " + playerData.Xp);
+            Debug.Log("Current Battle: " + playerData.battle);
 
             savedHealth = float.Parse(playerData.health);
             savedLevel = int.Parse(playerData.level);

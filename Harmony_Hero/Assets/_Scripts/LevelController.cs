@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LevelController : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class LevelController : MonoBehaviour
     }
     public void NewGameStart()
     {
-        SaveGameManager.Instance().SaveGame(1, 0, 0, 0);
+        SaveGameManager.Instance().SaveGame(1, 1, 0, 1);
         DataKeeper dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
         if (dataKeeper != null)
         {
@@ -50,6 +51,11 @@ public class LevelController : MonoBehaviour
     public void MainMenu()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+
+    public void EndGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(5);
     }
 
     public void QuitGame()

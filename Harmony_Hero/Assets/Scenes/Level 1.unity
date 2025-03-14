@@ -4302,7 +4302,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Movement: Arrow Keys
 
-    Camera: F & H Keys'
+    Camera: Q & E Keys'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
   m_sharedMaterial: {fileID: 1303159911859233479, guid: 826b43fa9e7ee5d4d85c5ae23eae07ba, type: 2}
@@ -8640,6 +8640,18 @@ PrefabInstance:
     - target: {fileID: 5055336960518784568, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555356744407877121, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555356744407877121, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7555356744407877121, guid: 2d796f41a64cfd549ae96f4128c9d97d, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -17025,7 +17037,7 @@ PrefabInstance:
       objectReference: {fileID: 1454660540}
     - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
       propertyPath: _velocity
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
       propertyPath: _playerHealth

@@ -37,9 +37,6 @@ public class PlayerController : MonoBehaviour
     {
         _controller = GetComponent<CharacterController>();
         _inputs = new InputSystem_Actions();
-
-        _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
-        _inputs.Player.Move.canceled += context => _move = Vector2.zero;
     }
 
     private void OnEnable() => _inputs.Enable();
@@ -80,11 +77,17 @@ public class PlayerController : MonoBehaviour
 
         // Delay UI Update to Prevent NULL Errors
         StartCoroutine(DelayedUIUpdate());
-        _inputs.Player.Attack.performed += context => LeftTurn();
-        _inputs.Player.Heal.performed += context => RightTurn();
 
         //get current scene index
         isInBattle = SceneManager.GetActiveScene().buildIndex == 2;
+
+        if (!isInBattle)
+        {
+            _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
+            _inputs.Player.Move.canceled += context => _move = Vector2.zero;
+            _inputs.Player.Attack.performed += context => LeftTurn();
+            _inputs.Player.Heal.performed += context => RightTurn();
+        }
 
     }
     public void LeftTurn()

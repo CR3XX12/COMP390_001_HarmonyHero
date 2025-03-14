@@ -10,6 +10,17 @@ public class InstructionController : MonoBehaviour
     private DataKeeper dataKeeper;
     void Start()
     {
+        instruction.SetActive(false);
+       
+    }
+    private void Update()
+    {
+        text.transform.Rotate(Vector3.down * 100f * Time.deltaTime);
+        ShowReminder();
+    }
+
+    private void ShowReminder()
+    {
         dataKeeper = Object.FindFirstObjectByType<DataKeeper>();
         instruction.SetActive(false);
 
@@ -34,12 +45,6 @@ public class InstructionController : MonoBehaviour
                 reminder.GetComponent<TextMeshPro>().text = "Can you hear\nthe melody of fate?";
                 break;
         }
-
-
-    }
-    private void Update()
-    {
-        text.transform.Rotate(Vector3.down * 100f * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)

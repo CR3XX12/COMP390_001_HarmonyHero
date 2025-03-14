@@ -9,13 +9,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public int _enemyLevel = 1;
     [SerializeField] public float _enemyDamage = 0.1f;
     [SerializeField] public GameObject _player;
-    [SerializeField] public DataKeeper _datakeeper;
 
     void Start()
     {
         _player = GameObject.Find("Player");
-        _datakeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
-        _enemyLevel = _datakeeper.currentBattle;
+        _enemyLevel = _player.GetComponent<PlayerController>()._playerEnteredBattle;
 
         GameObject newChild = Instantiate(_prefabList[_enemyLevel - 1], this.transform.position, Quaternion.identity);
         newChild.name = "SpriteEnemy";

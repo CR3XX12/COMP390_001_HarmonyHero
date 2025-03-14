@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float _playerHealth;
     [SerializeField] public float _playerDamage;
     [SerializeField] public int _playerCurrentBattle;
+    [SerializeField] public int _playerEnteredBattle;
 
     // XP Variables
     [SerializeField] public int _playerXP = 0;
@@ -148,6 +149,7 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "BattlePoint":
+                _playerEnteredBattle = int.Parse(other.name);
                 // Save player progress before entering battle
                 if (DataKeeper.Instance != null)
                 {

@@ -19,8 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] public float _playerHealth;
     [SerializeField] public float _playerDamage;
     [SerializeField] public int _playerCurrentBattle;
-    [SerializeField] public int _playerEnteredBattle;
-
     // XP Variables
     [SerializeField] public int _playerXP = 0;
     [SerializeField] public int _playerLevel = 1;
@@ -32,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private Slider healthBar;
 
     public CinemachineRotationComposer composer;
+    public DataKeeper _dataKeeper;
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
@@ -46,7 +45,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-
+        _dataKeeper = GameObject.Find("DataKeeper")?.GetComponent<DataKeeper>();
         _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
         // Load saved player data if available
         if (DataKeeper.Instance != null)
@@ -149,7 +148,13 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case "BattlePoint":
-                _playerEnteredBattle = int.Parse(other.name);
+                if (int.TryParse(other.name, out int parsedValue))
+                {
+                    _dataKeeper.enterBattle = parsedValue;
+                    Debug.Log("Player entered battle at " + _dataKeeper.enterBattle);
+                }
+
+
                 // Save player progress before entering battle
                 if (DataKeeper.Instance != null)
                 {
@@ -160,10 +165,6 @@ public class PlayerController : MonoBehaviour
                 LevelController levelController = FindFirstObjectByType<LevelController>();
                 if (levelController != null)
                 {
-                    if(_playerCurrentBattle < int.Parse(other.name) && _playerCurrentBattle <= 6)
-                    {
-                        _playerCurrentBattle = int.Parse(other.name);
-                    }                    
                     levelController.BattleScene();
                 }
                 else

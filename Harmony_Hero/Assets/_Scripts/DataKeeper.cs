@@ -10,6 +10,7 @@ public class DataKeeper : MonoBehaviour
     public int savedLevel;
     public int savedXPToNextLevel;
     public int currentBattle;
+    public int enterBattle;
 
     private void Awake()
     {

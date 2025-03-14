@@ -158,7 +158,10 @@ public class PlayerController : MonoBehaviour
                 LevelController levelController = FindFirstObjectByType<LevelController>();
                 if (levelController != null)
                 {
-                    _playerCurrentBattle = int.Parse(other.name);
+                    if(_playerCurrentBattle < int.Parse(other.name) && _playerCurrentBattle <= 6)
+                    {
+                        _playerCurrentBattle = int.Parse(other.name);
+                    }                    
                     levelController.BattleScene();
                 }
                 else

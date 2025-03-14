@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions _inputs;
     [SerializeField] private Vector2 _move;
     [SerializeField] private float _velocity = 3;
-
+    bool isFacingRight = true;
     private LevelController _levelController;
 
     [SerializeField] public float _playerHealth;
@@ -137,6 +137,19 @@ public class PlayerController : MonoBehaviour
         else if (_playerHealth >= 1.0f)
         {
             _playerHealth = 1.0f;
+        }
+
+        FlipSprite();
+    }
+
+    void FlipSprite()
+    {
+        if ((_move.x > 0 && !isFacingRight) || (_move.x < 0 && isFacingRight))
+        {
+            isFacingRight = !isFacingRight;
+            Vector3 scale = transform.localScale;
+            scale.x *= -1;
+            transform.localScale = scale;
         }
     }
 

@@ -17037,7 +17037,7 @@ PrefabInstance:
       objectReference: {fileID: 1454660540}
     - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
       propertyPath: _velocity
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
       propertyPath: _playerHealth

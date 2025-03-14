@@ -11926,10 +11926,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
       propertyPath: _prefabList.Array.size
-      value: 1
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
       propertyPath: '_prefabList.Array.data[0]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[3]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[4]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[5]'
+      value: 
+      objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: '_prefabList.Array.data[6]'
       value: 
       objectReference: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
     - target: {fileID: 5501172533984474993, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}

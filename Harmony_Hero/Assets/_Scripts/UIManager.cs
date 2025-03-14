@@ -60,6 +60,7 @@ public class UIManager : MonoBehaviour
         _inputs.Player.Skill.performed += context => PressedOption("Skill");
 
         enemyLevelText.text = "lv. " + GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyLevel.ToString();
+        playerLevelText.text = "lv. " + GameObject.Find("Player").GetComponent<PlayerController>()._playerLevel.ToString();
     }
     // Update is called once per frame
     void Update()

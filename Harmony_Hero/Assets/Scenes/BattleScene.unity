@@ -11947,6 +11947,18 @@ PrefabInstance:
       propertyPath: composer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: _playerLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: _playerHealth
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: _playerCurrentBattle
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8840137588685399531, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0

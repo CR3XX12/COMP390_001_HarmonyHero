@@ -17375,6 +17375,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
+      propertyPath: _velocity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
+      propertyPath: _playerLevel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
+      propertyPath: _playerHealth
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623333565832514588, guid: 0182ba83d4c5b274bb174667d265117f, type: 3}
+      propertyPath: _playerCurrentBattle
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -1360,6 +1360,8 @@ MonoBehaviour:
   savedXP: 0
   savedLevel: 0
   savedXPToNextLevel: 0
+  currentBattle: 0
+  enterBattle: 0
 --- !u!4 &1229977846
 Transform:
   m_ObjectHideFlags: 0

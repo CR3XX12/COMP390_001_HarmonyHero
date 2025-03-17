@@ -4,9 +4,14 @@ using UnityEngine.SceneManagement;
 public class LevelController : MonoBehaviour
 {
     public GameObject reminder;
+
+    private void Update()
+    {
+
+    }
     public void NewGameReminder()
     {
-        if(reminder != null)
+        if (reminder != null)
         {
             reminder.SetActive(true);
         }
@@ -19,6 +24,7 @@ public class LevelController : MonoBehaviour
         {
             dataKeeper.LoadGameFromSaveTxt();
         }
+
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
@@ -45,6 +51,7 @@ public class LevelController : MonoBehaviour
 
     public void BattleScene()
     {
+        DataKeeper.Instance.LoadPlayerData(GameObject.Find("Player").GetComponent<PlayerController>());
         UnityEngine.SceneManagement.SceneManager.LoadScene(2);
     }
 

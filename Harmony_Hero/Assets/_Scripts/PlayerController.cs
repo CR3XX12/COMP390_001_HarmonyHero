@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.Windows;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using Unity.Cinemachine;
-using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 
@@ -46,18 +44,47 @@ public class PlayerController : MonoBehaviour
     {
         _dataKeeper = GameObject.Find("DataKeeper")?.GetComponent<DataKeeper>();
         _levelController = GameObject.Find("LevelController")?.GetComponent<LevelController>();
-        // Load saved player data if available
+
         if (DataKeeper.Instance != null)
         {
-            DataKeeper.Instance.LoadPlayerData(this);
+            StartCoroutine(LoadDataAndSetupUI());
+        }
+        else
+        {
+            SetupUI();
         }
 
-        // Find Player UI in Level 1 if it exists
+        // Get current scene index
+        isInBattle = SceneManager.GetActiveScene().buildIndex == 2;
+
+        if (!isInBattle)
+        {
+            _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
+            _inputs.Player.Move.canceled += context => _move = Vector2.zero;
+            _inputs.Player.Attack.performed += context => LeftTurn();
+            _inputs.Player.Heal.performed += context => RightTurn();
+        }
+    }
+
+    private IEnumerator LoadDataAndSetupUI()
+    {
+        // Load player data
+        DataKeeper.Instance.LoadPlayerData(this);
+
+        // Wait for the next frame to ensure data is loaded
+        yield return null;
+
+        // Now safely set up UI
+        SetupUI();
+    }
+
+    private void SetupUI()
+    {
         GameObject levelTextObj = GameObject.Find("Level");
         if (levelTextObj != null)
         {
             levelText = levelTextObj.GetComponent<TextMeshProUGUI>();
-            levelText.text = "lv." + _playerLevel;
+            levelText.text = "lv. " + _playerLevel;
         }
 
         GameObject xpBarObj = GameObject.Find("XPbar");
@@ -74,22 +101,8 @@ public class PlayerController : MonoBehaviour
             healthBar = healthBarObj.GetComponent<Slider>();
             healthBar.value = _playerHealth;
         }
-
-        // Delay UI Update to Prevent NULL Errors
-        StartCoroutine(DelayedUIUpdate());
-
-        //get current scene index
-        isInBattle = SceneManager.GetActiveScene().buildIndex == 2;
-
-        if (!isInBattle)
-        {
-            _inputs.Player.Move.performed += context => _move = context.ReadValue<Vector2>();
-            _inputs.Player.Move.canceled += context => _move = Vector2.zero;
-            _inputs.Player.Attack.performed += context => LeftTurn();
-            _inputs.Player.Heal.performed += context => RightTurn();
-        }
-
     }
+
     public void LeftTurn()
     {
         transform.Rotate(Vector3.up, -30f);
@@ -99,20 +112,6 @@ public class PlayerController : MonoBehaviour
     {
         transform.Rotate(Vector3.up, 30f);
     }
-    // Coroutine to Delay UI Update for 0.1 seconds
-    private IEnumerator DelayedUIUpdate()
-    {
-        yield return new WaitForSeconds(0.1f);  // Small delay to allow UIManager to initialize
-
-        //UIManager uiManager = FindFirstObjectByType<UIManager>();
-
-        //if (uiManager != null)
-        //{
-        //    uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
-        //}
-    }
-
-
 
     void Update()
     {
@@ -151,6 +150,7 @@ public class PlayerController : MonoBehaviour
         { FlipSprite(); }
     }
 
+    
     void FlipSprite()
     {
         if ((_move.x > 0 && !isFacingRight) || (_move.x < 0 && isFacingRight))
@@ -232,22 +232,7 @@ public class PlayerController : MonoBehaviour
     {
         _playerXP += xpAmount;
 
-        // Update UI in Level 1 (If UI exists)
-        if (xpBar != null)
-        {
-            xpBar.value = _playerXP;
-        }
-        if (levelText != null)
-        {
-            levelText.text = "lv." + _playerLevel;
-        }
-
-        // Update UI in BattleScene if UIManager exists
-        UIManager uiManager = FindFirstObjectByType<UIManager>();
-        if (uiManager != null)
-        {
-            uiManager.UpdateXPUI(_playerXP, _playerLevel, _xpToNextLevel);
-        }
+        UpdateUIfromManager();
 
         if (_playerXP >= _xpToNextLevel)
         {
@@ -269,17 +254,11 @@ public class PlayerController : MonoBehaviour
             DataKeeper.Instance.SavePlayerData(this);
         }
 
-        // Update Level 1 UI
-        if (levelText != null)
-        {
-            levelText.text = "lv." + _playerLevel;
-        }
-        if (xpBar != null)
-        {
-            xpBar.maxValue = _xpToNextLevel;
-            xpBar.value = _playerXP;
-        }
+        UpdateUIfromManager();
+    }
 
+    public void UpdateUIfromManager()
+    {
         // Update UI in BattleScene if UIManager exists
         UIManager uiManager = FindFirstObjectByType<UIManager>();
         if (uiManager != null)

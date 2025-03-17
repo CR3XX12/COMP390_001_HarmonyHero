@@ -24,12 +24,12 @@ public class BattlePathController : MonoBehaviour
     [SerializeField] public Light battleLight5;
     [SerializeField] public Light battleLight6;
 
-    private PlayerController playerController;
+    private DataKeeper dataKeeper;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         battlePath1.SetActive(true);
-        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
         ActivateBattlePaths();
     }
 
@@ -41,13 +41,13 @@ public class BattlePathController : MonoBehaviour
     void ActivateBattlePaths()
     {
         // Ensure playerController is not null
-        if (playerController == null)
+        if (dataKeeper == null)
         {
             Debug.LogError("playerController is null!");
             return;
         }
 
-        int battleIndex = playerController._playerCurrentBattle;
+        int battleIndex = dataKeeper.currentBattle;
 
         // Store battle paths in an array for cleaner code
         GameObject[] battlePaths = { battlePath1, battlePath2, battlePath3, battlePath4, battlePath5, battlePath6 };

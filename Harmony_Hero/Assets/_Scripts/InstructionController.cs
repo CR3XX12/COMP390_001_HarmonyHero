@@ -22,7 +22,6 @@ public class InstructionController : MonoBehaviour
     private void ShowReminder()
     {
         dataKeeper = Object.FindFirstObjectByType<DataKeeper>();
-        instruction.SetActive(false);
 
         switch (dataKeeper.currentBattle)
         {

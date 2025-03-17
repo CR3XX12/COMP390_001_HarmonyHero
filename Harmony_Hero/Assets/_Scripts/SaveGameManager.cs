@@ -41,8 +41,11 @@ public class SaveGameManager
 
     public PlayerData LoadGame()
     {
-        if (!File.Exists(_filePath)) { return null; }
-
+        if (!File.Exists(_filePath)) { 
+            Debug.Log("No saved game data found.");
+            return null; 
+        }
+        Debug.Log("Game Data Loaded from " + _filePath);
         BinaryFormatter formatter = new BinaryFormatter();
         FileStream file = new FileStream(_filePath, FileMode.Open);
         PlayerData data = formatter.Deserialize(file) as PlayerData;

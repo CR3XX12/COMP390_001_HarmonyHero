@@ -51,7 +51,7 @@ public class UIManager : MonoBehaviour
     {
         battleManager = GameObject.Find("BattleManager");
         playerHealth = GameObject.Find("PlayerHUD").transform.Find("Health").gameObject;
-        enemyHealth = GameObject.Find("EnemyHUD").transform.Find("Health").gameObject;
+        enemyHealth = GameObject.Find("EnemyHUD")?.transform.Find("Health")?.gameObject;
 
         enemyDialogue = GameObject.Find("EnemyDialogue");
 
@@ -70,7 +70,7 @@ public class UIManager : MonoBehaviour
         ResetBattleUI();
         StartBattle();
         enemyLevelText.text = "lv. " + GameObject.Find("EnemyAI").GetComponent<EnemyController>()._enemyLevel.ToString();
-        playerLevelText.text = "lv. " + GameObject.Find("Player").GetComponent<PlayerController>()._playerLevel.ToString();
+       
 
     }
 
@@ -82,6 +82,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        playerLevelText.text = "lv. " + GameObject.Find("DataKeeper").GetComponent<DataKeeper>().savedLevel.ToString();
         if (playerHealth != null && GameObject.Find("Player") != null)
         {
             playerHealth.GetComponent<Slider>().value = GameObject.Find("Player").GetComponent<PlayerController>()._playerHealth;
@@ -172,7 +173,7 @@ public class UIManager : MonoBehaviour
 
         if (playerLevelText != null)
         {
-            playerLevelText.text = "lv." + level.ToString();
+            playerLevelText.text = "lv. " + level.ToString();
         }
         else
         {
@@ -181,8 +182,8 @@ public class UIManager : MonoBehaviour
 
         if (xpBar != null)
         {
-            xpBar.maxValue = xpToNextLevel;  // Set XP bar's max value
-            xpBar.value = xp;  // Set XP bar's current value            
+            xpBar.maxValue = xpToNextLevel;
+            xpBar.value = xp;          
         }
         else
         {

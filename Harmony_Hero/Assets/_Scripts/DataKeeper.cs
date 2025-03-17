@@ -31,8 +31,13 @@ public class DataKeeper : MonoBehaviour
 
     private void Update()
     {
-        
+
     }
+    public void PlayerStatus()
+    {
+        DebugManager.Log($"Current Playerr Status\nHealth: {savedHealth}\nLevel: {savedLevel}\nXP: {savedXP}\nCurrent Battle: {currentBattle}");
+    }
+
 
     public void LoadGameFromSaveTxt()
     {
@@ -40,12 +45,7 @@ public class DataKeeper : MonoBehaviour
 
         if (playerData != null)
         {
-            Debug.Log("From Load Game");
-            Debug.Log("Health: " + playerData.health);
-            Debug.Log("Level: " + playerData.level);
-            Debug.Log("XP: " + playerData.Xp);
-            Debug.Log("Current Battle: " + playerData.battle);
-
+            Debug.Log($"From Load Game\nHealth: {playerData.health}\nLevel: {playerData.level}\nXP: {playerData.Xp}\nCurrent Battle: {playerData.battle}");
             savedHealth = float.Parse(playerData.health);
             savedLevel = int.Parse(playerData.level);
             savedXP = int.Parse(playerData.Xp);

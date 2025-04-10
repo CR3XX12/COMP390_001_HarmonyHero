@@ -17,13 +17,21 @@ public class SpaceBarController : MonoBehaviour
 
     private InputSystem_Actions _inputs;
     [SerializeField] GameObject _enemy;
+
+    // Variables to track how many times the bar fills up
+    private float previousValue = 0f;
+    private int fullBarPassCount = 0;
+    private bool hasPressedThisCycle = false;
+
     private void Awake()
     {
         _inputs = new InputSystem_Actions();
         _enemy = GameObject.Find("EnemyAI");
     }
+
     private void OnEnable() => _inputs.Enable();
     private void OnDisable() => _inputs.Disable();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,15 +55,35 @@ public class SpaceBarController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _actionBarValue = _actionBar.GetComponent<Slider>().value;
         if (speed > 0)
         {
-            _actionBar.GetComponent<Slider>().value = Mathf.Repeat(Time.time * speed, 1f);
+            float currentValue = Mathf.Repeat(Time.time * speed, 1f);
+            _actionBar.GetComponent<Slider>().value = currentValue;
+
+            // NEW: Detect when bar loops from near full back to near empty
+            if (previousValue > 0.9f && currentValue < 0.1f)
+            {
+                fullBarPassCount++;
+
+                if (!hasPressedThisCycle && fullBarPassCount >= 2)
+                {
+                    Debug.Log("Action bar filled twice with no input.");
+                    SpaceBarMissed();
+                    ResetActionBarTracking();
+                }
+            }
+
+            previousValue = currentValue;
         }
+
+        _actionBarValue = _actionBar.GetComponent<Slider>().value;
     }
 
     void PressedSpaceBar()
     {
+        hasPressedThisCycle = true;
+        fullBarPassCount = 0;
+
         if (battleManager.GetComponent<BattleManager>().playerMove.Count >= 6)
         {
             CheckHit();
@@ -64,6 +92,7 @@ public class SpaceBarController : MonoBehaviour
         {
             SpaceBarMissed();
         }
+        ResetActionBarTracking();
     }
 
     public void BarReset()
@@ -71,6 +100,9 @@ public class SpaceBarController : MonoBehaviour
         _actionBar.GetComponent<Slider>().value = 0.0f;
         speed = 0.0f;
         StartCoroutine(ResumeSpeed());
+
+        // NEW: Reset orbit cycle tracking on bar reset
+        ResetActionBarTracking();
     }
 
     private IEnumerator ResumeSpeed()
@@ -116,25 +148,22 @@ public class SpaceBarController : MonoBehaviour
         PlayMissSound();
         Debug.Log("Miss");
 
-        // Reset the keys when miss
-        //battleManager.GetComponent<BattleManager>().ResetKeys();
-        //battleManager.GetComponent<BattleManager>().ResetKeysUI();
-        //BarReset();
-
         // Reset the battle when miss
-        
         _enemy.GetComponent<EnemyController>().EnemyAttack(true);
         UIManager.GetComponent<UIManager>().battleKeys.SetActive(false);
         StartCoroutine(ResetBattleUIManager());
     }
+
     private IEnumerator ResetBattleUIManager()
     {
         yield return new WaitForSeconds(2f);
         battleManager.GetComponent<BattleManager>().ResetBattle();
         UIManager.GetComponent<UIManager>().ResetBattleUI();
         UIManager.GetComponent<UIManager>().StartBattle();
-        
+
+        ResetActionBarTracking();
     }
+
     private void PlayHitSound()
     {
         if (hitSound != null)
@@ -157,7 +186,7 @@ public class SpaceBarController : MonoBehaviour
 
     private void PlayMissSound()
     {
-        if (hitSound != null)
+        if (missSound != null)
         {
             GameObject soundObject = new GameObject("TempAudio");
             AudioSource tempAudio = soundObject.AddComponent<AudioSource>();
@@ -175,4 +204,11 @@ public class SpaceBarController : MonoBehaviour
         }
     }
 
+    // NEW: Reset cycle tracking state
+    private void ResetActionBarTracking()
+    {
+        hasPressedThisCycle = false;
+        fullBarPassCount = 0;
+        previousValue = 0f;
+    }
 }

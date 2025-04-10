@@ -69,12 +69,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 979c73b5efd86584c8f5b85e0a296953, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _prefab: {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+  _prefabList:
+  - {fileID: 5805303410995410401, guid: a09d002288b0c864aa933a94677bc00d, type: 3}
+  - {fileID: 5805303410995410401, guid: c3e0a56c419c4f74fad13de1eff9f1dd, type: 3}
+  - {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
+  - {fileID: 5805303410995410401, guid: a09d002288b0c864aa933a94677bc00d, type: 3}
+  - {fileID: 5805303410995410401, guid: c3e0a56c419c4f74fad13de1eff9f1dd, type: 3}
+  - {fileID: 5805303410995410401, guid: 4209442295bbc234fb7a7a87b9cc0a01, type: 3}
   _enemyHealth: 1
   _enemyLevel: 0
   _enemyDamage: 0.1
   _player: {fileID: 0}
-  _datakeeper: {fileID: 0}
+  _dataKeeper: {fileID: 0}
 --- !u!95 &4133884116573220014
 Animator:
   serializedVersion: 7

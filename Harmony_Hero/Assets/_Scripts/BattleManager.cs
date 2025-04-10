@@ -86,7 +86,7 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Player Healed");
 
             _player.GetComponent<PlayerController>()._playerHealth += 0.1f;
-            _enemy.GetComponent<EnemyController>().ActionAnimation("Wait");
+            _enemy.GetComponent<EnemyController>().ActionAnimation("Idle");
         }
         else if (actionChosen == "Skill")
         {

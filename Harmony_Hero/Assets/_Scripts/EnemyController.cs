@@ -11,19 +11,26 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public GameObject _player;
     [SerializeField] public DataKeeper _dataKeeper;
 
+    private Animator _animator;
+
     void Start()
     {
         _player = GameObject.Find("Player");
         _dataKeeper = GameObject.Find("DataKeeper").GetComponent<DataKeeper>();
         if (_dataKeeper)
-        { _enemyLevel = _dataKeeper.enterBattle; }
+        {
+            _enemyLevel = _dataKeeper.enterBattle;
+            if (_enemyLevel <= 0)
+                _enemyLevel = 1;
+            Debug.Log("_enemyLevel == " + (_enemyLevel));
+        }
 
         GameObject newChild = Instantiate(_prefabList[_enemyLevel - 1], this.transform.position, Quaternion.identity);
         newChild.name = "SpriteEnemy";
         newChild.transform.SetParent(this.transform);
-        Animator animator = this.GetComponent<Animator>();
-        animator.Rebind();
-        animator.Update(0f);
+        _animator = newChild.GetComponent<Animator>();
+        _animator.Rebind();
+        _animator.Update(0f);
     }
 
     void Update()
@@ -69,41 +76,52 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    public void ActionAnimation(string option)
+    public void ActionAnimation(string action)
     {
-        // enemy action animation
-        if (option == "Attack")
+        ResetAllTriggers();
+
+        switch (action)
         {
-            // enemy attack animation
-            Debug.Log("Enemy Attacked Animation");
-        }
-        else if (option == "GetAttacked")
-        {
-            // enemy get attacked animation
-            Debug.Log("Enemy GetAttacked Animation");
-        }
-        else if (option == "Wait")
-        {
-            // enemy wait animation
-            Debug.Log("Enemy Waited Animation");
-        }
-        else if (option == "Dead")
-        {
-            // enemy dead animation
-            Debug.Log("Enemy Dead Animation");
+            case "Attack":
+                _animator.SetTrigger("Attack");
+                break;
+
+            case "GetAttacked":
+                _animator.SetTrigger("Hit");
+                break;
+
+            case "Idle":
+                _animator.SetBool("Idle", true);
+                break;
+
+            case "Death":
+                _animator.SetTrigger("Dead");
+                break;
         }
     }
 
-    public void EnemyAttack(bool validAttack)
+    private void ResetAllTriggers()
     {
-        this.ActionAnimation("Attack");
+        _animator.ResetTrigger("Attack");
+        _animator.ResetTrigger("Hit");
+        _animator.ResetTrigger("Dead");
+    }
 
-        if (validAttack)
-        {
-            float maxEmemyDamage = _enemyLevel * 0.1f;
-            _enemyDamage = Mathf.Round(Random.Range(0.1f, maxEmemyDamage) * 10) / 10f; //standard rounding to 1 decimal place
-            _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
-        }
+    public void EnemyAttack(bool isSkill)
+    {
+        StartCoroutine(PerformAttack(isSkill));
+    }
 
+    private System.Collections.IEnumerator PerformAttack(bool isSkill)
+    {
+        ResetAllTriggers();
+        _animator.SetBool("Idle", false);
+        _animator.SetTrigger("Attack");
+
+        // Wait for the animation to finish
+        yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
+
+        // Go back to idle
+        _animator.SetBool("Idle", true);
     }
 }

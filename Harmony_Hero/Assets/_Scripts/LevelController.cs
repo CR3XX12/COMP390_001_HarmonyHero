@@ -46,18 +46,27 @@ public class LevelController : MonoBehaviour
 
     public void LevelScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(1);
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayDefault();
+
+        SceneManager.LoadScene(1);
     }
 
     public void BattleScene()
     {
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayBattle();
+
         DataKeeper.Instance.LoadPlayerData(GameObject.Find("Player").GetComponent<PlayerController>());
-        UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+        SceneManager.LoadScene(2);
     }
 
     public void MainMenu()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayDefault();
+
+        SceneManager.LoadScene(0);
     }
 
     public void EndGame()

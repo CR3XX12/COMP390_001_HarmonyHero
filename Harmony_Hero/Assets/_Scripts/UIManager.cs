@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField] private GameObject dialogue;
+    [SerializeField] private GameObject playerActions;
     [SerializeField] private GameObject actionTxt;
     [SerializeField] private GameObject enemyDialogue;
     [SerializeField] public GameObject battleKeys;
@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
         enemyDialogue = GameObject.Find("EnemyDialogue");
 
         battleKeys = GameObject.Find("BattleKeys");
-        dialogue = GameObject.Find("Dialogue");
+        playerActions = GameObject.Find("PlayerActions");
         actionTxt = GameObject.Find("ActionTxt");
 
         if (playerHealth != null) playerHealth.GetComponent<Slider>().value = 1f;
@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
 
     public void ResetBattleUI()
     {
-        dialogue.SetActive(false);
+        playerActions.SetActive(false);
         battleManager.SetActive(false);
         battleKeys.SetActive(false);
         OnDisable();
@@ -138,7 +138,7 @@ public class UIManager : MonoBehaviour
     public void ShowBattleOptions()
     {
         ResetBattleUI();
-        dialogue.SetActive(true);
+        playerActions.SetActive(true);
         OnEnable();
     }
 

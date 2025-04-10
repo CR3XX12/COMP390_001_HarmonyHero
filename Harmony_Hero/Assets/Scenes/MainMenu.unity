@@ -2222,6 +2222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1988478927}
   - component: {fileID: 1988478926}
+  - component: {fileID: 1988478928}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -2341,6 +2342,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1229977846}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1988478928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988478925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 456671b2844c21e49abc146e2ee2a130, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMusic: {fileID: 8300000, guid: 1e9ddacab8c455843b1092e6cf1072e6, type: 3}
+  battleMusic: {fileID: 8300000, guid: 284ac07c3f9d9904a8ce7d0386500267, type: 3}
 --- !u!1 &2001405495
 GameObject:
   m_ObjectHideFlags: 0

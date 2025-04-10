@@ -107,12 +107,12 @@ public class EnemyController : MonoBehaviour
         _animator.ResetTrigger("Dead");
     }
 
-    public void EnemyAttack(bool isSkill)
+    public void EnemyAttack(bool validAttack)
     {
-        StartCoroutine(PerformAttack(isSkill));
+        StartCoroutine(PerformAttack(validAttack));
     }
 
-    private System.Collections.IEnumerator PerformAttack(bool isSkill)
+    private System.Collections.IEnumerator PerformAttack(bool validAttack)
     {
         ResetAllTriggers();
         _animator.SetBool("Idle", false);
@@ -120,6 +120,13 @@ public class EnemyController : MonoBehaviour
 
         // Wait for the animation to finish
         yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
+
+        if (validAttack)
+        {
+            float maxEmemyDamage = _enemyLevel * 0.1f;
+            _enemyDamage = Mathf.Round(Random.Range(0.1f, maxEmemyDamage) * 10) / 10f; //standard rounding to 1 decimal place
+            _player.GetComponent<PlayerController>()._playerHealth -= _enemyDamage;
+        }
 
         // Go back to idle
         _animator.SetBool("Idle", true);

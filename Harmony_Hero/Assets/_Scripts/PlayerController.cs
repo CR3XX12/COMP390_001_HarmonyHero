@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using Unity.Cinemachine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 
 public class PlayerController : MonoBehaviour
@@ -31,10 +32,19 @@ public class PlayerController : MonoBehaviour
 
     public CinemachineRotationComposer composer;
     public DataKeeper _dataKeeper;
+    Animator _animator;
+
+    // Footstep Sound
+    [SerializeField] private AudioClip leftFootstep;
+    [SerializeField] private AudioClip rightFootstep;
+    private AudioSource _audioSource;
+
     private void Awake()
     {
         _controller = GetComponent<CharacterController>();
         _inputs = new InputSystem_Actions();
+        _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable() => _inputs.Enable();
@@ -124,6 +134,8 @@ public class PlayerController : MonoBehaviour
                    transform.right * _move.x * _velocity * Time.fixedDeltaTime;
 
         _controller.Move(movement);
+        float moveSpeedMagnitude = new Vector2(_move.x, _move.y).magnitude;
+        _animator.SetFloat("moveSpeed", moveSpeedMagnitude);
 
         // Save before losing and transition
         if (_playerHealth <= 0.05f)
@@ -268,6 +280,19 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.LogError("[PlayerController] UIManager not found after leveling up!");
+        }
+    }
+
+    // 🎧 Play Footstep Sounds (called via animation events)
+    public void PlayFootstep(int foot)
+    {
+        if (foot == 0 && leftFootstep != null)
+        {
+            _audioSource.PlayOneShot(leftFootstep);
+        }
+        else if (foot == 1 && rightFootstep != null)
+        {
+            _audioSource.PlayOneShot(rightFootstep);
         }
     }
 }

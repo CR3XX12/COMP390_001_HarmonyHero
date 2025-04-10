@@ -24,31 +24,13 @@ public class PlayerWorldMovement : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void Update()
-    {
-        Debug.Log("Horizontal Input: " + horizontalInput);
-        Debug.Log("Vertical Input: " + verticalInput);
-        FlipSprite();
-    }
-
     void FixedUpdate()
     {
         moveDirection = new Vector3(horizontalInput * moveSpeed, 0, verticalInput * moveSpeed);
-        controller.Move(moveDirection * Time.deltaTime);
+        //controller.Move(moveDirection * Time.deltaTime);
 
         // Merge X and Z movement into a single variable (speed)
         float moveSpeedMagnitude = new Vector2(moveDirection.x, moveDirection.z).magnitude;
         animator.SetFloat("moveSpeed", moveSpeedMagnitude);
-    }
-
-    void FlipSprite()
-    {
-        if ((horizontalInput > 0 && !isFacingRight) || (horizontalInput < 0 && isFacingRight))
-        {
-            isFacingRight = !isFacingRight;
-            Vector3 scale = transform.localScale;
-            scale.x *= -1;
-            transform.localScale = scale;
-        }
     }
 }

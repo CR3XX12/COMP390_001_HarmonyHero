@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
         {
             _enemyLevel = _dataKeeper.enterBattle;
             if (_enemyLevel <= 0)
-                _enemyLevel = 1;
+                _enemyLevel = 2;
             Debug.Log("_enemyLevel == " + (_enemyLevel));
         }
 

@@ -1,11 +1,11 @@
-﻿using UnityEngine;
+﻿// (Keep all your using statements as-is)
+using UnityEngine;
 using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using Unity.Cinemachine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
-
 
 public class PlayerController : MonoBehaviour
 {
@@ -38,6 +38,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip leftFootstep;
     [SerializeField] private AudioClip rightFootstep;
     private AudioSource _audioSource;
+
+    // Skill Prefab
+    [SerializeField] private GameObject skillPrefab;
+    [SerializeField] private GameObject healPrefab;
+
+    // Skill Sound Effect 🔊
+    [SerializeField] private AudioClip skillSFX;
 
     private void Awake()
     {
@@ -158,11 +165,13 @@ public class PlayerController : MonoBehaviour
         {
             _playerHealth = 1.0f;
         }
-        if(!isInBattle)
-        { FlipSprite(); }
+
+        if (!isInBattle)
+        {
+            FlipSprite();
+        }
     }
 
-    
     void FlipSprite()
     {
         if ((_move.x > 0 && !isFacingRight) || (_move.x < 0 && isFacingRight))
@@ -187,7 +196,6 @@ public class PlayerController : MonoBehaviour
                     _dataKeeper.enterBattle = parsedValue;
                     Debug.Log("Player entered battle at " + _dataKeeper.enterBattle);
                 }
-
 
                 // Save player progress before entering battle
                 if (DataKeeper.Instance != null)
@@ -224,10 +232,12 @@ public class PlayerController : MonoBehaviour
             case "Heal":
                 // Heal animation
                 Debug.Log("Player Healed Animation");
+                CastHeal();
                 break;
             case "Skill":
                 // Skill animation
                 Debug.Log("Player Skill Animation");
+                CastSkill();
                 break;
             case "Dodge":
                 // Dodge animation
@@ -237,7 +247,41 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("Invalid Animation Option!");
                 break;
         }
+    }
 
+    // Instantiates the skill prefab at player's position and plays SFX
+    private void CastSkill()
+    {
+        if (skillPrefab != null)
+        {
+            Vector3 spawnPosition = transform.position;
+            spawnPosition.y = 0.14f;
+            Instantiate(skillPrefab, spawnPosition, transform.rotation);
+
+            // 🔊 Play skill sound effect
+            if (skillSFX != null)
+            {
+                _audioSource.PlayOneShot(skillSFX);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Skill Prefab not assigned in inspector!");
+        }
+    }
+
+    private void CastHeal()
+    {
+        if (healPrefab != null)
+        {
+            Vector3 spawnPosition = transform.position;
+            spawnPosition.y = 0.14f;
+            Instantiate(healPrefab, spawnPosition, transform.rotation);
+        }
+        else
+        {
+            Debug.LogWarning("Heal Prefab not assigned in inspector!");
+        }
     }
 
     public void GainXP(int xpAmount)

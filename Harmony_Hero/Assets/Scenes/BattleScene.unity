@@ -11806,6 +11806,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 6903604900546673735, guid: ebc36607e118aed448c8489746ee3820, type: 3}
+    - target: {fileID: 208408052289522935, guid: f45aaf51f312e8247b0535b58ffb700b, type: 3}
       propertyPath: _prefabList.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -11943,6 +11947,18 @@ PrefabInstance:
       propertyPath: composer
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: skillSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 4168a5ad11ea8d74393445a19a13b733, type: 3}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: healPrefab
+      value: 
+      objectReference: {fileID: 8755263187306960892, guid: be564e70eb18d7a4184358dc88c1cbfa, type: 3}
+    - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
+      propertyPath: skillPrefab
+      value: 
+      objectReference: {fileID: 356379022561314778, guid: 412479d462215904598f7ae9d1527c0d, type: 3}
     - target: {fileID: 5890195625887274879, guid: da641133276c695468f8c7cd1dd229ba, type: 3}
       propertyPath: _playerLevel
       value: 0

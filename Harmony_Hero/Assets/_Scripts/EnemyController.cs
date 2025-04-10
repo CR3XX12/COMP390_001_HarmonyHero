@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour
 
     private Animator _animator;
 
+    [Header("Projectile")]
+    [SerializeField] private GameObject projectilePrefab; // Projectile to spawn on attack
+
     void Start()
     {
         _player = GameObject.Find("Player");
@@ -39,7 +42,6 @@ public class EnemyController : MonoBehaviour
         {
             StartCoroutine(ChangeScene());
         }
-
     }
 
     private IEnumerator ChangeScene()
@@ -61,11 +63,12 @@ public class EnemyController : MonoBehaviour
         {
             DataKeeper.Instance.SavePlayerData(player);
         }
+
         // Find and call LevelController to load the Win Scene
         LevelController levelController = FindFirstObjectByType<LevelController>();
         if (levelController != null)
         {
-            if(_player.GetComponent<PlayerController>()._playerCurrentBattle <= 6)
+            if (_player.GetComponent<PlayerController>()._playerCurrentBattle <= 6)
             {
                 levelController.WinScene();
             }
@@ -112,11 +115,18 @@ public class EnemyController : MonoBehaviour
         StartCoroutine(PerformAttack(validAttack));
     }
 
-    private System.Collections.IEnumerator PerformAttack(bool validAttack)
+    private IEnumerator PerformAttack(bool validAttack)
     {
         ResetAllTriggers();
         _animator.SetBool("Idle", false);
         _animator.SetTrigger("Attack");
+
+        // === Spawn Projectile ===
+        if (projectilePrefab != null)
+        {
+            GameObject projectile = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+            Destroy(projectile, 2f); // Automatically destroy after 2 seconds
+        }
 
         // Wait for the animation to finish
         yield return new WaitForSeconds(_animator.GetCurrentAnimatorStateInfo(0).length);
